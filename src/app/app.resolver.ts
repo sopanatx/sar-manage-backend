@@ -6,4 +6,8 @@ export class AppResolver {
   sayHello(): string {
     return 'Hello World!';
   }
+  @Query(() => String)
+  sayHello1(): string {
+    return 'หวัดดีค้าบบบบบ';
+  }
 }
