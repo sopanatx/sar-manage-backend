@@ -9,13 +9,21 @@ type getAppVersionModel {
   version: String
   allowedMinimumVersion: String
   versionCode: Float
-  allowedMinimunVersionCode: Float
+  allowedMinimumVersionCode: Float
   isAllowedOlderVersion: Boolean
   apiServerType: String
   isInMaintenance: Boolean
 }
 
+type getAllUserModel {
+  studentId: String!
+  studentFirstName: String!
+  studentLastName: String!
+  studentEmail: String!
+}
+
 type Query {
   sayHello: String!
   getAppVersion: getAppVersionModel!
+  getAllUser: [getAllUserModel!]!
 }

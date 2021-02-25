@@ -3,6 +3,8 @@ import { AppService } from './app/app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app/app.resolver';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from './prisma/prisma.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,7 +16,8 @@ import { ConfigModule } from '@nestjs/config';
       installSubscriptionHandlers: true,
       context: ({ req, res, connection }) => ({ req, res, connection }),
     }),
+    AuthModule,
   ],
-  providers: [AppService, AppResolver],
+  providers: [AppService, AppResolver, PrismaService],
 })
 export class AppModule {}
