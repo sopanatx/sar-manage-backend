@@ -2,7 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type getAppVersionModel {
+  statusCode: Float!
+  status: String!
+  serverZone: String
+  version: String
+  allowedMinimumVersion: String
+  versionCode: Float
+  allowedMinimunVersionCode: Float
+  isAllowedOlderVersion: Boolean
+  apiServerType: String
+  isInMaintenance: Boolean
+}
+
 type Query {
   sayHello: String!
-  sayHello1: String!
+  getAppVersion: getAppVersionModel!
 }

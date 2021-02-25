@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './app/app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app/app.resolver';
 import { ConfigModule } from '@nestjs/config';
