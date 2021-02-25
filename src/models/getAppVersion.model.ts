@@ -21,7 +21,7 @@ export class getAppVersionModel {
   versionCode?: number;
 
   @Field({ nullable: true })
-  allowedMinimunVersionCode?: number;
+  allowedMinimumVersionCode?: number;
 
   @Field({ nullable: true })
   isAllowedOlderVersion?: boolean;

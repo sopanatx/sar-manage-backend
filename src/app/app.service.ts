@@ -11,7 +11,7 @@ export class AppService {
       version: process.env.APP_VERSION,
       allowedMinimumVersion: process.env.ALLOWED_MINIMUM_APP_VERSION,
       versionCode: +process.env.APP_VERSIONCODE,
-      allowedMinimunVersionCode: 204,
+      allowedMinimumVersionCode: 204,
       isAllowedOlderVersion: true,
       apiServerType: process.env.API_TYPE,
       isInMaintenance: eval(process.env.IS_INMAINTENANCE) || false,
