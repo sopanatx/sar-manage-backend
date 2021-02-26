@@ -18,7 +18,7 @@ async function bootstrap() {
   app.use(helmet.hidePoweredBy());
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 7001);
   Logger.log('Application Listening on HTTP');
 }
 async function bootstraps() {
@@ -43,7 +43,7 @@ async function bootstraps() {
   app.use(helmet.hidePoweredBy());
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(443);
+  await app.listen(process.env.PORT || 7001);
   Logger.log('Application Listening on HTTPS');
 }
 if (process.env.SSL == 'true') {
