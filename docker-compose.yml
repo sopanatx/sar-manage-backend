@@ -1,0 +1,13 @@
+version: '4.0'
+services:
+  nest-api:
+    container_name: itpsruapi-graphql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 7001:7001
+    depends_on:
+      - postgres
+    env_file:
+      - .env
