@@ -24,7 +24,7 @@ export class getAllUserModel {
   userLevel: string;
 
   @Field()
-  isActive: boolean;
+  isActivate: boolean;
 
   @Field()
   lastLogin: Date;
