@@ -2,6 +2,9 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class getCalendarModel {
+  @Field()
+  id: String;
+
   @Field({ nullable: true })
   activityName: String;
 
