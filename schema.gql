@@ -15,6 +15,11 @@ type getAppVersionModel {
   isInMaintenance: Boolean
 }
 
+type tokenModel {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type getAllUserModel {
   id: String!
   studentId: String!
@@ -36,4 +41,14 @@ type Query {
   sayHello: String!
   getAppVersion: getAppVersionModel!
   getAllUser: [getAllUserModel!]!
+  getAllUserCount: Float!
+}
+
+type Mutation {
+  signInWithStudentEmail(localAuthDto: LocalAuthDto!): tokenModel!
+}
+
+input LocalAuthDto {
+  studentId: String!
+  studentPassword: String!
 }
