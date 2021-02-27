@@ -23,6 +23,7 @@ type getAllUserModel {
   studentEmail: String!
   isBanned: Boolean!
   userLevel: String!
+  isActivate: Boolean!
   lastLogin: DateTime!
 }
 
