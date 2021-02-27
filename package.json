@@ -1,10 +1,10 @@
 {
   "name": "itpsruplus-graphql",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "3.0.0",
+  "description": "GraphQL API For ITPSRU+ Application",
+  "author": "Sopanat Suradach",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "LICENSED",
   "engines": {
     "node": "14.16.0"
   },
