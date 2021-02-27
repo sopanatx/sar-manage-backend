@@ -4,6 +4,7 @@ import { getAllUserModel } from 'src/models/getAllUser.model';
 import { tokenModel } from 'src/models/token.model';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthService } from './auth.service';
+import { LocalAuthRegisterDto } from './dto/local-auth-register.dto';
 import { LocalAuthDto } from './dto/local-auth.dto';
 
 @Resolver()
@@ -15,8 +16,7 @@ export class AuthResolver {
   @Query(() => [getAllUserModel])
   async getAllUser(): Promise<getAllUserModel[]> {
     const getUser = await this.prisma.account.findMany();
-    console.log(getUser);
-    if (!getUser) throw new NotFoundException();
+    //   if (!getUser) throw new NotFoundException('No user exist.');
     return getUser;
   }
   @Query(() => Number)
@@ -30,4 +30,9 @@ export class AuthResolver {
   ): Promise<tokenModel> {
     return await this.authService.signInWithStudentEmail(localAuthDto);
   }
+
+  //  @Mutation(() => tokenModel)
+  // async createUser(
+  //   @Args('localAuthRegister') localAuthRegisterDto: LocalAuthRegisterDto,
+  //  ): Promise<tokenModel> {}
 }

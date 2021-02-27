@@ -6,6 +6,7 @@ import { AppResolver } from './app/app.resolver';
 import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { UserModule } from './user/user.module';
     AuthModule,
 
     UserModule,
+
+    StudentModule,
   ],
   providers: [AppService, AppResolver, PrismaService],
 })
