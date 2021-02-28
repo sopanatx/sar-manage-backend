@@ -14,6 +14,6 @@ import { JwtStrategy } from './strategy/jwt.strategy';
       signOptions: { expiresIn: '30d' },
     }),
   ],
-  providers: [AuthService, AuthResolver, PrismaService],
+  providers: [AuthService, AuthResolver, PrismaService, JwtStrategy],
 })
 export class AuthModule {}

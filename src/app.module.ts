@@ -7,6 +7,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { StudentModule } from './student/student.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -16,14 +17,19 @@ import { StudentModule } from './student/student.module';
       playground: eval(process.env.IS_DEBUG) || false,
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
+
       context: ({ req, res, connection }) => ({ req, res, connection }),
+      introspection: true,
+      cors: false,
+      resolverValidationOptions: {
+        requireResolversForResolveType: false,
+      },
     }),
 
     AuthModule,
-
     UserModule,
-
     StudentModule,
+    PassportModule,
   ],
   providers: [AppService, AppResolver, PrismaService],
 })

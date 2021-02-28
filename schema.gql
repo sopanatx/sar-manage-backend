@@ -63,8 +63,9 @@ type Query {
   getAppVersion: getAppVersionModel!
   getAllUser: [getAllUserModel!]!
   getAllUserCount: Float!
-  getCalendar: [getCalendarModel!]!
+  getAllCalendar: [getCalendarModel!]!
   getAllNews: [getNewsModel!]!
+  getStudentGrade(studentId: String!): String!
 }
 
 type Mutation {
