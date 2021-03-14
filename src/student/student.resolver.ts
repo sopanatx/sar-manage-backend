@@ -12,27 +12,4 @@ import { json } from 'express';
 @Resolver()
 export class StudentResolver {
   constructor(private prisma: PrismaService) {}
-
-  @UseGuards(GqlAuthGuard)
-  @Query(() => [getCalendarModel])
-  async getAllCalendar(): Promise<getCalendarModel[]> {
-    const getCalendar = await this.prisma.activityCalendar.findMany();
-    return getCalendar;
-  }
-
-  @UseGuards(GqlAuthGuard)
-  @Query(() => [getNewsModel])
-  async getAllNews(): Promise<getNewsModel[]> {
-    return await this.prisma.news.findMany();
-  }
-  @UseGuards(GqlAuthGuard)
-  @Query(() => String)
-  async getStudentGrade(
-    @Args('studentId') studentId: string,
-    @GetUser() user,
-  ): Promise<any> {
-    //return user;
-    console.log(user);
-    return user.username;
-  }
 }

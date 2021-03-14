@@ -8,10 +8,6 @@ export class AppResolver {
 
   @Query(() => String)
   sayHello(): string {
-    return 'Hello World!';
-  }
-  @Query(() => getAppVersionModel)
-  async getAppVersion(): Promise<getAppVersionModel> {
-    return await this.appService.getAppVersion();
+    return 'It Work!';
   }
 }
