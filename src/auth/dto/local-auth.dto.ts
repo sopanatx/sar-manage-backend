@@ -5,15 +5,14 @@ import { Field, InputType, ObjectType } from '@nestjs/graphql';
 export class LocalAuthDto {
   @IsString()
   @IsNotEmpty()
-  @MinLength(10)
-  @MaxLength(10)
+  @MaxLength(255)
   @Field()
-  studentId: string;
+  username: string;
 
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(255)
   @Field()
-  studentPassword: string;
+  password: string;
 }

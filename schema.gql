@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type tokenModel {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type Query {
   sayHello: String!
+}
+
+type Mutation {
+  signIn(localAuthDto: LocalAuthDto!): tokenModel!
+}
+
+input LocalAuthDto {
+  username: String!
+  password: String!
 }
