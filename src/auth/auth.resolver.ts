@@ -32,9 +32,6 @@ export class AuthResolver {
   async signUp(
     @Args('localAuthRegisterDto') localAuthRegisterDto: LocalAuthRegisterDto,
   ): Promise<any> {
-    return {
-      accessToken: '',
-      refreshToken: '',
-    };
+    return this.authService.signUp(localAuthRegisterDto);
   }
 }

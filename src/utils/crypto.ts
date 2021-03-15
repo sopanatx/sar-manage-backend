@@ -22,7 +22,6 @@ export async function EncryptCipherText(
     JSON.stringify(userData),
     process.env.AES_ENCRYPTION_KEY,
   ).toString();
-  console.log(ciphertext);
   return ciphertext;
 }
 
@@ -35,6 +34,6 @@ export async function DecryptCipherText(ciphertext: string): Promise<any> {
     const data = decryptCipherText.toString(CryptoJS.enc.Utf8);
     return JSON.parse(data);
   } catch {
-    throw new BadRequestException('Failed to decrypt cipherText.');
+    throw new BadRequestException('Fail to decrypt ciphertext');
   }
 }

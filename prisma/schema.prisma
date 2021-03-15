@@ -8,15 +8,17 @@ datasource db {
 }
 
 model Account {
-  id           String   @id @default(uuid())
-  username     String   @unique
+  id           String  @id @default(uuid())
+  username     String  @unique
   password     String
   passwordSalt String
+  email        String
   userLevel    String?
   fullname     String?
-  email        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  refreshToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
 }
 
