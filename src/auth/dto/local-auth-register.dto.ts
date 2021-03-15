@@ -1,3 +1,4 @@
+import { Field, InputType } from '@nestjs/graphql';
 import {
   IsString,
   MaxLength,
@@ -7,55 +8,29 @@ import {
   IsNotEmpty,
   IsOptional,
 } from 'class-validator';
-
+@InputType()
 export class LocalAuthRegisterDto {
   @IsString()
   @IsNotEmpty()
-  @MinLength(10)
-  @MaxLength(10)
-  studentId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  studentFirstName: string;
-
-  @IsString()
-  @MaxLength(255)
-  @IsNotEmpty()
-  studentLastName: string;
-
-  @IsEmail()
-  @MaxLength(100)
-  studentEmail: string;
-
-  @IsString()
   @MinLength(5)
   @MaxLength(255)
-  @IsNotEmpty()
-  studentPassword: string;
+  @Field()
+  username: string;
 
   @IsString()
-  @MaxLength(20)
-  nickname: string;
-
-  @IsNumberString()
   @IsNotEmpty()
-  @MaxLength(1)
-  educateGroup: number;
+  @MaxLength(255)
+  @Field()
+  password: string;
 
-  @IsNumberString()
-  @IsNotEmpty()
-  @MaxLength(2)
-  admissionYear: number;
-
-  @IsNumberString()
-  @IsNotEmpty()
-  @MaxLength(10)
-  phoneNumber: string;
-
-  @IsOptional()
   @IsString()
-  @MaxLength(200)
-  profileImageUrl: string;
+  @IsNotEmpty()
+  @MaxLength(255)
+  @Field()
+  fullname: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  @Field()
+  email: string;
 }

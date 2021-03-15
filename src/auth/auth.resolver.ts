@@ -19,4 +19,22 @@ export class AuthResolver {
     private prisma: PrismaService,
     private readonly authService: AuthService,
   ) {}
+
+  @Mutation(() => tokenModel)
+  async signIn(
+    @Args('localAuthDto') localAuthDto: LocalAuthDto,
+  ): Promise<tokenModel> {
+    console.log(localAuthDto);
+    return this.authService.signIn(localAuthDto);
+  }
+
+  @Mutation(() => tokenModel)
+  async signUp(
+    @Args('localAuthRegisterDto') localAuthRegisterDto: LocalAuthRegisterDto,
+  ): Promise<any> {
+    return {
+      accessToken: '',
+      refreshToken: '',
+    };
+  }
 }

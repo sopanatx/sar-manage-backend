@@ -15,4 +15,17 @@ export class AuthService {
     private prisma: PrismaService,
     private readonly jwtService: JwtService,
   ) {}
+
+  async signIn(localAuthDto: LocalAuthDto): Promise<tokenModel> {
+    const { username, password } = localAuthDto;
+    const getUser = await this.prisma.account.findUnique({
+      where: {
+        username,
+      },
+    });
+    return {
+      accessToken: '',
+      refreshToken: '',
+    };
+  }
 }

@@ -13,9 +13,17 @@ type Query {
 
 type Mutation {
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
+  signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
 }
 
 input LocalAuthDto {
   username: String!
   password: String!
+}
+
+input LocalAuthRegisterDto {
+  username: String!
+  password: String!
+  fullname: String!
+  email: String!
 }

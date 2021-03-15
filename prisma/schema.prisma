@@ -8,20 +8,21 @@ datasource db {
 }
 
 model Account {
-  id                  String           @id @default(uuid())
-  username            String           @unique()
-  password            String            
-  passwordSalt        String
-  userLevel           String?
-  fullname            String?
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @default(now())
+  id           String   @id @default(uuid())
+  username     String   @unique
+  password     String
+  passwordSalt String
+  userLevel    String?
+  fullname     String?
+  email        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
 
 }
 
 model listMenu {
-  id      String    @unique @default(uuid())
-  menuName  String  
+  id       String @unique @default(uuid())
+  menuName String
 }
 
 enum userLevel {
