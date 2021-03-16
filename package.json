@@ -5,6 +5,9 @@
   "author": "Sopanat Suradach",
   "private": true,
   "license": "LICENSED",
+  "engines": {
+    "node": "14.13.0"
+  },
   "engineStrict": true,
   "scripts": {
     "build": "nest build",
