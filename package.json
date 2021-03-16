@@ -6,7 +6,7 @@
   "private": true,
   "license": "LICENSED",
   "engines": {
-    "node": "14.13.0"
+    "node": "14.15.3"
   },
   "engineStrict": true,
   "scripts": {
