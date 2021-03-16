@@ -88,7 +88,14 @@ export class AuthService {
       where: {
         username,
       },
+      select: {
+        username: true,
+        email: true,
+      },
     });
+    // if (getUser) {
+    //   throw new ConflictException('This account already exists');
+    // }
     if (getUser) {
       throw new ConflictException('This account already exists');
     }

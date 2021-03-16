@@ -6,8 +6,8 @@ import { AppResolver } from './app/app.resolver';
 import { PrismaService } from './prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { StudentModule } from './student/student.module';
 import { PassportModule } from '@nestjs/passport';
+import { DocumentsModule } from './documents/documents.module';
 
 @Module({
   imports: [
@@ -28,8 +28,8 @@ import { PassportModule } from '@nestjs/passport';
 
     AuthModule,
     UserModule,
-    StudentModule,
     PassportModule,
+    DocumentsModule,
   ],
   providers: [AppService, AppResolver, PrismaService],
 })
