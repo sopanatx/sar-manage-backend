@@ -21,9 +21,6 @@ import { DocumentsModule } from './documents/documents.module';
       context: ({ req, res, connection }) => ({ req, res, connection }),
       introspection: true,
       cors: false,
-      resolverValidationOptions: {
-        requireResolversForResolveType: false,
-      },
     }),
 
     AuthModule,
