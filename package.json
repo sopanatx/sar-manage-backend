@@ -1,7 +1,7 @@
 {
-  "name": "ezydocs-graphql",
+  "name": "sar-manage-graphql",
   "version": "3.0.0",
-  "description": "GraphQL API For ITPSRU+ Application",
+  "description": "SAR Management Graphql Backend",
   "author": "Sopanat Suradach",
   "private": true,
   "license": "LICENSED",

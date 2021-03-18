@@ -27,6 +27,30 @@ model listMenu {
   menuName String
 }
 
+model semester {
+  id           String   @unique @default(uuid())
+  semesterName String   @unique
+  isAvaliable  Boolean? @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+model primaryMenu {
+  id          String    @unique @default(uuid())
+  primaryName String    @unique
+  isAvaliable Boolean?  @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  subMenu     subMenu[]
+}
+
+model subMenu {
+  id            String      @unique @default(uuid())
+  subMenuName   String      @unique
+  primaryMenuId String
+  primaryMenu   primaryMenu @relation(fields: [primaryMenuId], references: [id])
+}
+
 enum userLevel {
   ADMIN
   STUDENT

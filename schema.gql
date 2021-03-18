@@ -7,8 +7,31 @@ type tokenModel {
   refreshToken: String!
 }
 
+type getAllSubMenu {
+  id: String!
+  subMenuName: String
+  privaryMenuId: String
+}
+
+type primaryMenu {
+  id: String
+  primaryName: String
+  isAvaliable: Boolean
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  subMenu: getAllSubMenu
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
   sayHello: String!
+  getServiceStatus: String!
+  getAllPrimaryMenu: [primaryMenu!]!
+  getSubmenu: [getAllSubMenu!]!
 }
 
 type Mutation {

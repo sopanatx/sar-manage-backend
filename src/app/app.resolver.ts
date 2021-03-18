@@ -12,4 +12,8 @@ export class AppResolver {
   sayHello(): string {
     return 'It Work!';
   }
+  @Query(() => String)
+  getServiceStatus(): string {
+    return 'ok';
+  }
 }
