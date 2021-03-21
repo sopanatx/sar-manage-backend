@@ -17,7 +17,6 @@ import { DocumentsModule } from './documents/documents.module';
       playground: eval(process.env.IS_DEBUG) || false,
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
-
       context: ({ req, res, connection }) => ({ req, res, connection }),
       introspection: true,
       cors: false,
