@@ -1,4 +1,4 @@
-FROM node:12 AS builder
+FROM node:14 AS builder
 
 # Create app directory
 WORKDIR /app
@@ -8,7 +8,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install app dependencies
-RUN npm install
+RUN npm install --no-optional
 # Generate prisma client, leave out if generating in `postinstall` script
 RUN npx prisma generate
 
@@ -16,7 +16,7 @@ COPY . .
 
 RUN npm run build
 RUN npm rebuild bcrypt --build-from-source
-FROM node:12
+FROM node:14
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
