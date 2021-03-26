@@ -9,7 +9,9 @@ export class DocumentsResolver {
 
   @Query(() => [primaryMenu])
   async getAllPrimaryMenu(): Promise<any> {
-    const getAllPrimaryMenu = await this.prisma.primaryMenu.findMany();
+    const getAllPrimaryMenu = await this.prisma.$queryRaw<primaryMenu>(
+      'SELECT * FROM primaryMenu;',
+    );
     return getAllPrimaryMenu;
   }
 

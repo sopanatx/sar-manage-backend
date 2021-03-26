@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type getServiceStatus {
+  status: String
+  serviceName: String
+  isInMaintenance: Boolean
+}
+
 type tokenModel {
   accessToken: String!
   refreshToken: String!
@@ -29,7 +35,7 @@ scalar DateTime
 
 type Query {
   sayHello: String!
-  getServiceStatus: String!
+  getServiceStatus: getServiceStatus!
   getAllPrimaryMenu: [primaryMenu!]!
   getSubmenu: [getAllSubMenu!]!
 }
