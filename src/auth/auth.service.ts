@@ -148,7 +148,7 @@ export class AuthService {
     // set expired time after 60 days
     expiredTime.setDate(renewRequestTime.getDay() + 1);
     const token = crypto
-      .randomBytes(64)
+      .randomBytes(32)
       .toString('base64')
       .replace(/\//g, '')
       .replace(/\=/g, '')
