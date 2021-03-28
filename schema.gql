@@ -13,6 +13,11 @@ type tokenModel {
   refreshToken: String!
 }
 
+type PasswordResetResponseModel {
+  status: String!
+  statusMessage: String!
+}
+
 type getAllSubMenu {
   id: String!
   subMenuName: String
@@ -43,6 +48,7 @@ type Query {
 type Mutation {
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
+  requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
 }
 
 input LocalAuthDto {
@@ -55,4 +61,8 @@ input LocalAuthRegisterDto {
   password: String!
   fullname: String!
   email: String!
+}
+
+input PasswordResetDto {
+  username: String!
 }

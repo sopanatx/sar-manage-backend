@@ -22,6 +22,14 @@ model Account {
 
 }
 
+model PasswordReset {
+  id  String @id @default(uuid())
+  username String
+  resetPasswordToken String @unique
+  requested DateTime @default(now())
+  expired DateTime @default(now())
+}
+
 model listMenu {
   id       String @unique @default(uuid())
   menuName String

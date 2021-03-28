@@ -12,6 +12,8 @@ import { EncryptCipherText } from 'src/utils/crypto';
 import { tokenModel } from 'src/models/token.model';
 import { LocalAuthRegisterDto } from './dto/local-auth-register.dto';
 import { ConflictException } from '@nestjs/common';
+import { PasswordResetDto } from './dto/PasswordReset.dto';
+import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
 @Injectable()
 export class AuthService {
   constructor(
@@ -118,5 +120,14 @@ export class AuthService {
 
     const payload = { username, password };
     return this.signIn(payload);
+  }
+
+  async PasswordReset(
+    passwordResetDto: PasswordResetDto,
+  ): Promise<PasswordResetResponseModel> {
+    return {
+      status: 'ok',
+      statusMessage: 'Please check your email to reset your password.',
+    };
   }
 }

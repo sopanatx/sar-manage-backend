@@ -13,6 +13,8 @@ import { LocalAuthRegisterDto } from './dto/local-auth-register.dto';
 import { LocalAuthDto } from './dto/local-auth.dto';
 import { GqlAuthGuard } from './strategy/graphql-auth.guard';
 import { AuthenticationError } from 'apollo-server';
+import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
+import { PasswordResetDto } from './dto/PasswordReset.dto';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -33,5 +35,12 @@ export class AuthResolver {
     @Args('localAuthRegisterDto') localAuthRegisterDto: LocalAuthRegisterDto,
   ): Promise<any> {
     return this.authService.signUp(localAuthRegisterDto);
+  }
+
+  @Mutation(() => PasswordResetResponseModel)
+  async requestPasswordReset(
+    @Args('PasswordResetDto') passwordResetDto: PasswordResetDto,
+  ): Promise<PasswordResetResponseModel> {
+    return this.authService.PasswordReset(passwordResetDto);
   }
 }
