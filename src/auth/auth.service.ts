@@ -28,7 +28,7 @@ export class AuthService {
         username,
       },
     });
-    if (!getUser) throw new NotFoundException('This user does not exist');
+    if (!getUser) throw new NotFoundException('ไม่มีชื่อผู้ใช้งานนี้ในระบบ');
     const hash = await bcrypt.hash(password, getUser.passwordSalt);
 
     if (hash != getUser.password) return false;
@@ -54,7 +54,7 @@ export class AuthService {
     if (validate) {
       console.log(getUser);
     } else {
-      throw new UnauthorizedException('Incorrect Username or Password');
+      throw new UnauthorizedException('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
     }
 
     const accessToken = await this.jwtService.sign(getUser);
