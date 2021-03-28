@@ -18,7 +18,7 @@ import { DocumentsModule } from './documents/documents.module';
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
       context: ({ req, res, connection }) => ({ req, res, connection }),
-      introspection: eval(process.env.INTROSPECTIION) || false,
+      introspection: eval(process.env.INTROSPECTION) || false,
       cors: false,
     }),
 
