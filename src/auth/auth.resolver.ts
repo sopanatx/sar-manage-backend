@@ -15,6 +15,7 @@ import { GqlAuthGuard } from './strategy/graphql-auth.guard';
 import { AuthenticationError } from 'apollo-server';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
 import { PasswordResetDto } from './dto/PasswordReset.dto';
+import { UserIp } from 'src/decorators/getIP';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -40,7 +41,9 @@ export class AuthResolver {
   @Mutation(() => PasswordResetResponseModel)
   async requestPasswordReset(
     @Args('PasswordResetDto') passwordResetDto: PasswordResetDto,
+    @UserIp() ip,
   ): Promise<PasswordResetResponseModel> {
+    console.log('Password Requested From IP:', ip);
     return this.authService.PasswordReset(passwordResetDto);
   }
 }

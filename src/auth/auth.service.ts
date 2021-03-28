@@ -14,6 +14,9 @@ import { LocalAuthRegisterDto } from './dto/local-auth-register.dto';
 import { ConflictException } from '@nestjs/common';
 import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
+import * as CryptoJS from 'crypto-js';
+import * as crypto from 'crypto';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -125,9 +128,51 @@ export class AuthService {
   async PasswordReset(
     passwordResetDto: PasswordResetDto,
   ): Promise<PasswordResetResponseModel> {
-    return {
-      status: 'ok',
-      statusMessage: 'Please check your email to reset your password.',
-    };
+    console.log(passwordResetDto);
+    const username = passwordResetDto.username;
+    const getUser = await this.prisma.account.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        username: true,
+      },
+    });
+    if (!getUser) {
+      throw new NotFoundException('ไม่มีผู้ใช้งานนี้ในระบบ');
+    }
+    // Get Current Time
+    const renewRequestTime = new Date();
+    // Get Expired Time
+    const expiredTime = new Date();
+    // set expired time after 60 days
+    expiredTime.setDate(renewRequestTime.getDay() + 1);
+    const token = crypto
+      .randomBytes(64)
+      .toString('base64')
+      .replace(/\//g, '')
+      .replace(/\=/g, '')
+      .replace(/\+/g, '');
+
+    try {
+      const createPasswordReset = await this.prisma.passwordReset.create({
+        data: {
+          username,
+          resetPasswordToken: token,
+          requested: renewRequestTime,
+          expired: expiredTime, //
+        },
+      });
+
+      return {
+        status: 'ok',
+        statusMessage:
+          'โปรดตรวจสอบอีเมลของท่าน เพื่อทำการกู้คืนรหัสผ่านในการเข้าสู่ระบบ',
+      };
+    } catch (err) {
+      throw new InternalServerErrorException(
+        'เซิร์ฟเวอร์ไม่สามารถประมวลผลคำขอนี้ได้ (Server Error)',
+      );
+    }
   }
 }
