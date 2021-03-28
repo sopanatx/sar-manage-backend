@@ -74,7 +74,9 @@ export class AuthService {
         },
       });
     } catch (err) {
-      throw new InternalServerErrorException('Could not update refreshToken');
+      throw new InternalServerErrorException(
+        'ไม่สามารถอัปเดท refreshToken ได้',
+      );
     }
     return {
       accessToken,
