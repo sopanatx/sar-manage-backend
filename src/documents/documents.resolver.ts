@@ -24,7 +24,11 @@ export class DocumentsResolver {
 
   @Query(() => [getSemester])
   async getSemester(): Promise<getSemester[]> {
-    const getSemester = await this.prisma.semester.findMany();
+    const getSemester = await this.prisma.semester.findMany({
+      orderBy: {
+        semesterName: 'desc',
+      },
+    });
     if (!getSemester) throw new NotFoundException('ไม่พบข้อมูลในระบบ');
 
     return getSemester;
