@@ -7,10 +7,10 @@ export class getCategories {
   id: number;
 
   @Field()
-  categoryName: String;
+  categoryName: string;
 
   @Field()
-  isAvailable: Boolean;
+  isAvailable: boolean;
 
   @Field()
   createdAt: Date;

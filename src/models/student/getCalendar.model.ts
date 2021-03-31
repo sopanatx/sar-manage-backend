@@ -3,13 +3,13 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class getCalendarModel {
   @Field()
-  id: String;
+  id: string;
 
   @Field({ nullable: true })
-  activityName: String;
+  activityName: string;
 
   @Field({ nullable: true })
-  activityDetail: String;
+  activityDetail: string;
 
   @Field({ nullable: true })
   activityStartDate: Date;
@@ -18,8 +18,8 @@ export class getCalendarModel {
   activityEndDate: Date;
 
   @Field({ nullable: true })
-  activityLocation: String;
+  activityLocation: string;
 
   @Field({ nullable: true })
-  activityImage: String;
+  activityImage: string;
 }

@@ -1,4 +1,4 @@
-export const filterClassDay = day => {
+export const filterClassDay = (day) => {
   switch (day) {
     case 1:
       return 'จันทร์';
@@ -18,7 +18,7 @@ export const filterClassDay = day => {
   }
 };
 
-export const convertPeriod = period => {
+export const convertPeriod = (period) => {
   if (period == '') {
     return 'Nodata';
   }
@@ -47,6 +47,6 @@ export const convertPeriod = period => {
   }
 };
 
-export const myTrim = x => {
+export const myTrim = (x) => {
   return x.replace(/^\s+|\s+$/gm, ' ');
 };

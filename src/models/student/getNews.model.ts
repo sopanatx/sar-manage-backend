@@ -3,22 +3,22 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class getNewsModel {
   @Field()
-  id: String;
+  id: string;
 
   @Field({ nullable: true })
-  newsTitle: String;
+  newsTitle: string;
 
   @Field({ nullable: true })
-  newsDetails: String;
+  newsDetails: string;
 
   @Field({ nullable: true })
-  newsImage: String;
+  newsImage: string;
 
   @Field({ nullable: true })
-  newsUrl: String;
+  newsUrl: string;
 
   @Field({ nullable: true })
-  newsType: String;
+  newsType: string;
 
   @Field({ nullable: true })
   createdAt: Date;

@@ -7,13 +7,13 @@ export class SubCategories {
   id: number;
 
   @Field()
-  subCategoryName?: String;
+  subCategoryName?: string;
 
   @Field()
-  subCategoryDescription?: String;
+  subCategoryDescription?: string;
 
   @Field()
-  isAvailable?: Boolean;
+  isAvailable?: boolean;
 
   @Field()
   createdAt?: Date;
