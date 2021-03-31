@@ -1,9 +1,7 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
 import { getSemester } from 'src/models/Query/getSemester';
-import { getAllSubMenu } from 'src/models/Query/getSubmenu';
-import { primaryMenu } from 'src/models/Query/PrimaryMenu';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Resolver()
