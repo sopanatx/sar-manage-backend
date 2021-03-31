@@ -44,7 +44,6 @@ export class AuthService {
   async signIn(localAuthDto: LocalAuthDto): Promise<tokenModel> {
     const { username, password } = localAuthDto;
     const validate = await this.validatePassword(username, password);
-    console.log(`Validate Password Status : ${validate}`);
     const getUser = await this.prisma.account.findUnique({
       where: {
         username,
@@ -56,11 +55,8 @@ export class AuthService {
         userLevel: true,
       },
     });
-    if (validate) {
-      console.log(getUser);
-    } else {
+    if (!validate)
       throw new UnauthorizedException('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
-    }
 
     const accessToken = await this.jwtService.sign(getUser);
     const refreshToken = await EncryptCipherText(
@@ -100,9 +96,7 @@ export class AuthService {
         email: true,
       },
     });
-    // if (getUser) {
-    //   throw new ConflictException('This account already exists');
-    // }
+
     if (getUser) {
       throw new ConflictException('This account already exists');
     }

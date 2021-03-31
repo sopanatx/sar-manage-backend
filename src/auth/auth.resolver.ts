@@ -27,7 +27,6 @@ export class AuthResolver {
   async signIn(
     @Args('localAuthDto') localAuthDto: LocalAuthDto,
   ): Promise<tokenModel> {
-    console.log(localAuthDto);
     return this.authService.signIn(localAuthDto);
   }
 

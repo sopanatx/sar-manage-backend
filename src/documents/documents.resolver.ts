@@ -9,19 +9,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class DocumentsResolver {
   constructor(private prisma: PrismaService) {}
 
-  @Query(() => [primaryMenu])
-  async getAllPrimaryMenu(): Promise<any> {
-    const getAllPrimaryMenu = await this.prisma.$queryRaw<primaryMenu>(
-      'SELECT * FROM primaryMenu;',
-    );
-    return getAllPrimaryMenu;
-  }
-
-  @Query(() => [getAllSubMenu])
-  async getSubmenu(): Promise<getAllSubMenu[]> {
-    return await this.prisma.subMenu.findMany();
-  }
-
   @Query(() => [getSemester])
   async getSemester(): Promise<getSemester[]> {
     const getSemester = await this.prisma.semester.findMany({

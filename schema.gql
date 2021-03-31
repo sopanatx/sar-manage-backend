@@ -37,21 +37,29 @@ type getAllSubMenu {
   privaryMenuId: String
 }
 
-type primaryMenu {
-  id: String
-  primaryName: String
-  isAvaliable: Boolean
+type SubCategories {
+  id: Float!
+  subCategoryName: String!
+  subCategoryDescription: String!
+  isAvailable: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
-  subMenu: getAllSubMenu
+}
+
+type getCategories {
+  id: Float!
+  categoryName: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  SubCategory: [SubCategories!]
 }
 
 type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
-  getAllPrimaryMenu: [primaryMenu!]!
-  getSubmenu: [getAllSubMenu!]!
   getSemester: [getSemester!]!
+  getCategories: [getCategories!]!
 }
 
 type Mutation {

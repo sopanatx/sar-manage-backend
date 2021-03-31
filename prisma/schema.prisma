@@ -23,43 +23,54 @@ model Account {
 }
 
 model PasswordReset {
-  id  String @id @default(uuid())
-  username String
-  resetPasswordToken String @unique
-  requested DateTime @default(now())
-  expired DateTime @default(now())
+  id                 String   @id @default(uuid())
+  username           String
+  resetPasswordToken String   @unique
+  requested          DateTime @default(now())
+  expired            DateTime @default(now())
 }
 
-model listMenu {
-  id       String @unique @default(uuid())
-  menuName String
+model Semester {
+  id             String           @unique @default(uuid())
+  semesterName   String           @unique
+  isAvaliable    Boolean?         @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  FileUploadData FileUploadData[]
 }
 
-model semester {
-  id           String   @unique @default(uuid())
-  semesterName String   @unique
-  isAvaliable  Boolean? @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+model Category {
+  id           Int           @unique @default(autoincrement())
+  categoryName String
+  isAvailable  Boolean?      @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  SubCategory  SubCategory[]
 }
 
-model primaryMenu {
-  id          String    @unique @default(uuid())
-  primaryName String    @unique
-  isAvaliable Boolean?  @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  subMenu     subMenu[]
+model SubCategory {
+  id                     Int              @unique @default(autoincrement())
+  subCategoryName        String
+  subCategoryDescription String
+  isAvailable            Boolean?         @default(true)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @default(now())
+  categories             Category         @relation(references: [id], fields: [categoryId])
+  FileUploadData         FileUploadData[]
+  categoryId             Int
 }
 
-model subMenu {
+model FileUploadData {
   id            String      @unique @default(uuid())
-  subMenuName   String      @unique
-  primaryMenuId String
-  primaryMenu   primaryMenu @relation(fields: [primaryMenuId], references: [id])
+  filename      String
+  fileUrl       String
+  Semester      Semester    @relation(references: [id], fields: [semesterId])
+  SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
+  semesterId    String
+  subCategoryId Int
 }
 
-enum userLevel {
+enum UserLevel {
   ADMIN
   STUDENT
   TEACHER
