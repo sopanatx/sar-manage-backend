@@ -33,7 +33,7 @@ import { CategoryModule } from './category/category.module';
       cors: false,
     }),
     GoogleRecaptchaModule.forRoot({
-      secretKey: '6LcApJIaAAAAALh5C0PPeQyjNwxEEBQMvsdKn-R_',
+      secretKey: process.env.RECAPTCHA_SECRET_KEY,
       response: (req: IncomingMessage) =>
         (req.headers.recaptcha || '').toString(),
       skipIf: process.env.NODE_ENV !== 'production',
