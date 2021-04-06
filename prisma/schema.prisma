@@ -26,6 +26,7 @@ model PasswordReset {
   id                 String   @id @default(uuid())
   username           String
   resetPasswordToken String   @unique
+  isValid            Boolean  @default(true)
   requested          DateTime @default(now())
   expired            DateTime @default(now())
 }
@@ -33,7 +34,7 @@ model PasswordReset {
 model Semester {
   id             String           @unique @default(uuid())
   semesterName   String           @unique
-  isAvaliable    Boolean?         @default(false)
+  isAvailable    Boolean?         @default(false)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
   FileUploadData FileUploadData[]
@@ -68,6 +69,28 @@ model FileUploadData {
   SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
   semesterId    String
   subCategoryId Int
+}
+
+model NavigationMenu {
+  id             Int        @unique
+  navigationName String?
+  navigationUrl  String?
+  assignedRole   UserLevel?
+  isLocked       Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now())
+
+  ChildrenNavigationMenu ChildrenNavigationMenu[]
+}
+
+model ChildrenNavigationMenu {
+  id               Int            @unique
+  childrenName     String?
+  childrenUrl      String?
+  assignedRole     UserLevel?
+  isLocked         Boolean        @default(false)
+  NavigationMenuId Int
+  NavMenu          NavigationMenu @relation(references: [id], fields: [NavigationMenuId])
 }
 
 enum UserLevel {

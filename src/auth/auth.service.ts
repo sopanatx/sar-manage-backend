@@ -58,7 +58,9 @@ export class AuthService {
     if (!validate)
       throw new UnauthorizedException('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
 
-    const accessToken = await this.jwtService.sign(getUser);
+    const accessToken = await this.jwtService.sign({
+      role: getUser.userLevel,
+    });
     const refreshToken = await EncryptCipherText(
       getUser.fullname,
       getUser.username,

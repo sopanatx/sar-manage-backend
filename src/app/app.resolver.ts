@@ -11,8 +11,7 @@ import { AppService } from './app.service';
 @Resolver()
 export class AppResolver {
   constructor(
-    private readonly appService: AppService,
-    private readonly recaptchaValidator: GoogleRecaptchaValidator,
+    private readonly appService: AppService, ///  private readonly recaptchaValidator: GoogleRecaptchaValidator,
   ) {}
   //@Recaptcha()
   @Query(() => String)

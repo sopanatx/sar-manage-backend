@@ -8,10 +8,18 @@ export class CategoryService {
 
   async getCategories(): Promise<getCategories[]> {
     const getCategories = await this.prisma.category.findMany({
+      where: {
+        isAvailable: true,
+      },
       include: {
         SubCategory: true,
       },
+      orderBy: {
+        categoryName: 'asc',
+      },
     });
+
+    // this.prisma.subscribe
     return getCategories;
   }
 }

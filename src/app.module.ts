@@ -17,6 +17,7 @@ import {
 } from '@nestlab/google-recaptcha';
 import { IncomingMessage } from 'http';
 import { CategoryModule } from './category/category.module';
+import { RolesGuard } from './auth/strategy/roles.guard';
 
 @Module({
   imports: [
@@ -26,20 +27,9 @@ import { CategoryModule } from './category/category.module';
       playground: eval(process.env.IS_DEBUG) || false,
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
-      context: ({ request, reply }) => {
-        return { req: request, res: reply };
-      },
+      context: ({ req }) => ({ req }),
       introspection: eval(process.env.INTROSPECTION) || false,
       cors: false,
-    }),
-    GoogleRecaptchaModule.forRoot({
-      secretKey: process.env.RECAPTCHA_SECRET_KEY,
-      response: (req: IncomingMessage) =>
-        (req.headers.recaptcha || '').toString(),
-      skipIf: process.env.NODE_ENV !== 'production',
-      network: GoogleRecaptchaNetwork.Recaptcha,
-      applicationType: ApplicationType.GraphQL,
-      agent: null,
     }),
     AuthModule,
     UserModule,
@@ -47,6 +37,14 @@ import { CategoryModule } from './category/category.module';
     DocumentsModule,
     CategoryModule,
   ],
-  providers: [AppService, AppResolver, PrismaService],
+  providers: [
+    AppService,
+    AppResolver,
+    PrismaService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
