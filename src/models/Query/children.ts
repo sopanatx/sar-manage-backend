@@ -1,20 +1,22 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { primaryMenu } from './PrimaryMenu';
 
 @ObjectType()
-export class getSemester {
-  @Field({ nullable: true })
-  id: string;
+export class childrenNav {
+  @Field()
+  id: number;
 
   @Field({ nullable: true })
-  semesterName: string;
+  childrenName: string;
 
   @Field({ nullable: true })
-  isAvailable: boolean;
+  childrenUrl: string;
 
   @Field({ nullable: true })
-  createdAt: Date;
+  childrenDetails: string;
 
   @Field({ nullable: true })
-  updatedAt: Date;
+  assignedRole: string;
+
+  @Field({ nullable: true })
+  isLocked: boolean;
 }

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import * as helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import * as compression from 'compression';
+import { RolesGuard } from './auth/strategy/roles.guard';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(

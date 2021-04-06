@@ -21,7 +21,7 @@ type PasswordResetResponseModel {
 type getSemester {
   id: String
   semesterName: String
-  isAvaliable: Boolean
+  isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -49,11 +49,32 @@ type getCategories {
   SubCategory: [SubCategories!]
 }
 
+type childrenNav {
+  id: Float!
+  childrenName: String
+  childrenUrl: String
+  childrenDetails: String
+  assignedRole: String
+  isLocked: Boolean
+}
+
+type getNavMemu {
+  id: Float!
+  navigationName: String!
+  navigationUrl: String
+  assignedRole: String!
+  isLocked: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  ChildrenNavigationMenu: [childrenNav!]
+}
+
 type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
   getSemester: [getSemester!]!
   getCategories: [getCategories!]!
+  getNavMemu: [getNavMemu!]!
 }
 
 type Mutation {

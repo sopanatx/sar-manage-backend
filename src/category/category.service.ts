@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { getCategories } from 'src/models/Query/getCategories';
+import { getNavMemu } from 'src/models/Query/getNavMenu';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -21,5 +22,13 @@ export class CategoryService {
 
     // this.prisma.subscribe
     return getCategories;
+  }
+
+  async getNavigation(): Promise<getNavMemu[]> {
+    return this.prisma.navigationMenu.findMany({
+      include: {
+        ChildrenNavigationMenu: true,
+      },
+    });
   }
 }

@@ -72,7 +72,7 @@ model FileUploadData {
 }
 
 model NavigationMenu {
-  id             Int        @unique
+  id             Int        @unique @default(autoincrement())
   navigationName String?
   navigationUrl  String?
   assignedRole   UserLevel?
@@ -84,9 +84,10 @@ model NavigationMenu {
 }
 
 model ChildrenNavigationMenu {
-  id               Int            @unique
+  id               Int            @unique @default(autoincrement())
   childrenName     String?
   childrenUrl      String?
+  childrenDetails  String?
   assignedRole     UserLevel?
   isLocked         Boolean        @default(false)
   NavigationMenuId Int
