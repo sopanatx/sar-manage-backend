@@ -63,12 +63,18 @@ model SubCategory {
 
 model FileUploadData {
   id            String      @unique @default(uuid())
+  index         Int?
   filename      String
   fileUrl       String
   Semester      Semester    @relation(references: [id], fields: [semesterId])
   SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
   semesterId    String
   subCategoryId Int
+  authorId      String
+  isDeleted     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime    @default(now())
 }
 
 model NavigationMenu {

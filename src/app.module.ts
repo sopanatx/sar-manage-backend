@@ -8,27 +8,23 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { DocumentsModule } from './documents/documents.module';
-import { ThrottlerGuard, ThrottlerModule } from 'nestjs-throttler';
 import { APP_GUARD } from '@nestjs/core';
-import {
-  ApplicationType,
-  GoogleRecaptchaModule,
-  GoogleRecaptchaNetwork,
-} from '@nestlab/google-recaptcha';
-import { IncomingMessage } from 'http';
 import { CategoryModule } from './category/category.module';
 import { RolesGuard } from './auth/strategy/roles.guard';
-
+import { FileUpload } from './scalars/upload.scalar';
+import { UploadController } from './upload/upload.controller';
+const isDevelopmentEnv = process.env.ENV == 'development' ?? (true || false);
+console.log({ isDevelopmentEnv });
 @Module({
   imports: [
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
-      debug: eval(process.env.IS_DEBUG) || false,
-      playground: eval(process.env.IS_DEBUG) || false,
+      debug: isDevelopmentEnv,
+      playground: isDevelopmentEnv,
       autoSchemaFile: 'schema.gql',
       installSubscriptionHandlers: true,
       context: ({ req }) => ({ req }),
-      introspection: eval(process.env.INTROSPECTION) || false,
+      introspection: isDevelopmentEnv,
       cors: false,
     }),
     AuthModule,
@@ -45,6 +41,8 @@ import { RolesGuard } from './auth/strategy/roles.guard';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    //    FileUpload,
   ],
+  controllers: [UploadController],
 })
 export class AppModule {}

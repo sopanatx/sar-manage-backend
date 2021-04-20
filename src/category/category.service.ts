@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { getCategories } from 'src/models/Query/getCategories';
 import { getNavMemu } from 'src/models/Query/getNavMenu';
 import { PrismaService } from 'src/prisma/prisma.service';
