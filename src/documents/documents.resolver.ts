@@ -1,18 +1,17 @@
 import { NotFoundException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
-import { Roles } from 'src/decorators/roles';
 import { getSemester } from 'src/models/Query/getSemester';
-import { addDocumentModel } from 'src/models/Response/addDocuments.model';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { uploadDocument } from './dto/uploadDocuments';
 import { GraphQLUpload } from 'apollo-server-express';
-import { createWriteStream } from 'fs';
-import { BadRequestException } from '@nestjs/common';
-
+import { GetUser } from 'src/shared/decorators/decorators';
+import { DocumentsService } from './documents.service';
 @Resolver()
 export class DocumentsResolver {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly documentService: DocumentsService,
+  ) {}
 
   @UseGuards(GqlAuthGuard)
   // @Roles('User')
@@ -27,45 +26,18 @@ export class DocumentsResolver {
 
     return getSemester;
   }
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   async uploadFile(
     @Args({ name: 'file', type: () => GraphQLUpload })
     { createReadStream, filename, mimetype },
+    @GetUser() user,
   ): Promise<boolean> {
-    const allowedMimeTypes = [
-      'application/pdf',
-      'image/jpeg',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ];
-    const allowedFileExtensions = [
-      'pdf',
-      'jpeg',
-      'jpg',
-      'png',
-      'doc',
-      'docx',
-      'xls',
-      'txt',
-      'xlsx',
-    ];
-    const filetype = filename.split('.')[1];
-
-    //check file extension or mimetype is in allowed array]
-    //if not then throw error to user about wrong file
-    if (
-      !mimetype.includes(allowedMimeTypes) ||
-      !filetype.includes(allowedFileExtensions)
-    )
-      throw new BadRequestException('File type not allowed');
-
-    //TODO: Change filename and upload to s3 Storage
-    filename = Date.now() + '.' + filetype;
-    console.log(mimetype);
-    return new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(`./tmp/${filename}`))
-        .on('finish', () => resolve(true))
-        .on('error', () => reject(false)),
+    return await this.documentService.fileUpload(
+      createReadStream,
+      filename,
+      mimetype,
+      user,
     );
   }
 }

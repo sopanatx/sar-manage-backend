@@ -14,7 +14,6 @@ import { LocalAuthRegisterDto } from './dto/local-auth-register.dto';
 import { ConflictException } from '@nestjs/common';
 import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
-import * as CryptoJS from 'crypto-js';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -59,7 +58,7 @@ export class AuthService {
       throw new UnauthorizedException('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
 
     const accessToken = await this.jwtService.sign({
-      role: getUser.userLevel,
+      getUser,
     });
     const refreshToken = await EncryptCipherText(
       getUser.fullname,
