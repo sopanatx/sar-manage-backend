@@ -6,6 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { GraphQLUpload } from 'apollo-server-express';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { DocumentsService } from './documents.service';
+import { uploadFileModel } from './models/uploadFile.model';
+import { CheckSemesterDto } from './dto/checkSemester.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -39,5 +41,19 @@ export class DocumentsResolver {
       mimetype,
       user,
     );
+  }
+
+  @Mutation(() => Boolean)
+  async checkSemester(
+    @Args('checkSemester') checkSemester: CheckSemesterDto,
+  ): Promise<boolean> {
+    const { semester } = checkSemester;
+    const getSemester = await this.prisma.semester.findUnique({
+      where: {
+        semesterName: semester,
+      },
+    });
+    if (!getSemester) return false;
+    return true;
   }
 }

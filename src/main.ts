@@ -7,6 +7,11 @@ import { RolesGuard } from './auth/strategy/roles.guard';
 import { graphqlUploadExpress } from 'graphql-upload';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  var corsOptions = {
+    origin: '<insert uri of front-end domain>',
+    credentials: true, // <-- REQUIRED backend setting
+  };
+  app.enableCors();
   app.use(
     helmet({
       contentSecurityPolicy: false,

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { SubCategories } from './subCategories';
+import { Topic } from './topic';
 
 @ObjectType()
 export class getCategories {

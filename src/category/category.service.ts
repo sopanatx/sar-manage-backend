@@ -13,7 +13,11 @@ export class CategoryService {
         isAvailable: true,
       },
       include: {
-        SubCategory: true,
+        SubCategory: {
+          include: {
+            Topic: true,
+          },
+        },
       },
       orderBy: {
         categoryName: 'asc',

@@ -31,6 +31,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Topic {
+  id: Float!
+  topicName: String!
+  topicDetails: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type SubCategories {
   id: Float!
   subCategoryName: String!
@@ -38,6 +46,7 @@ type SubCategories {
   isAvailable: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  Topic: [Topic!]
 }
 
 type getCategories {
@@ -82,6 +91,7 @@ type Mutation {
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
   uploadFile(file: Upload!): Boolean!
+  checkSemester(checkSemester: CheckSemesterDto!): Boolean!
 }
 
 input LocalAuthDto {
@@ -102,3 +112,7 @@ input PasswordResetDto {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+input CheckSemesterDto {
+  semester: String!
+}

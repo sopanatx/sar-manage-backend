@@ -11,7 +11,7 @@ import { DocumentsModule } from './documents/documents.module';
 import { APP_GUARD } from '@nestjs/core';
 import { CategoryModule } from './category/category.module';
 import { RolesGuard } from './auth/strategy/roles.guard';
-import { FileUpload } from './scalars/upload.scalar';
+import { NestMinioModule } from 'nestjs-minio';
 import { UploadController } from './upload/upload.controller';
 const isDevelopmentEnv = process.env.ENV == 'development' ?? (true || false);
 console.log({ isDevelopmentEnv });
@@ -25,9 +25,8 @@ console.log({ isDevelopmentEnv });
       installSubscriptionHandlers: true,
       context: ({ req }) => ({ req }),
       introspection: isDevelopmentEnv,
-      cors: false,
+      
     }),
-
     AuthModule,
     UserModule,
     PassportModule,
