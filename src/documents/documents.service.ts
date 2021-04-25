@@ -4,9 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { GraphQLUpload } from 'apollo-server-express';
 import { createWriteStream, stat } from 'fs';
 import * as path from 'path';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
+import { SearchSemesterFile } from './dto/searchSemesterFile';
+import { searchFileBySemesterModel } from './model/searchFileBySemester';
 @Injectable()
 export class DocumentsService {
+  constructor(private prisma: PrismaService) {}
   async fileUpload(
     createReadStream,
     filename,
@@ -66,5 +70,50 @@ export class DocumentsService {
         .on('finish', () => resolve(true))
         .on('error', () => reject(false)),
     );
+  }
+
+  async searchFileByName(
+    searchFileByName: SearchSemesterFile,
+  ): Promise<searchFileBySemesterModel[]> {
+    const { semester } = searchFileByName;
+    console.log(semester);
+    // const getFile = await this.prisma.fileUploadData.findMany({
+    //   where: {
+    //     semesterId: semester,
+    //     isDeleted: false,
+    //   },
+    //   include: {
+    //     Semester: {
+    //       select: {
+    //         semesterName: true,
+    //       },
+    //     },
+    //     SubCategory: {
+    //       select: {
+    //         subCategoryName: true,
+    //       },
+    //     },
+    //     Topic: {
+    //       select: {
+    //         topicName: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    const getFileByCategories = await this.prisma.category.findMany({
+      include: {
+        FileUploadData: {
+          where: { semesterId: semester },
+          select: {
+            index: true,
+          },
+        },
+      },
+    });
+
+    console.log(getFileByCategories);
+    //   console.log(getFile);
+    return getFileByCategories;
   }
 }

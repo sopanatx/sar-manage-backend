@@ -31,6 +31,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type FileUploadDataByName {
+  index: String!
+}
+
+type searchFileBySemesterModel {
+  id: Float!
+  categoryName: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  FileUploadData: [FileUploadDataByName!]
+}
+
 type Topic {
   id: Float!
   topicName: String!
@@ -82,8 +95,18 @@ type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
   getSemester: [getSemester!]!
+  findSemester(findSemesterDto: FindSemesterDto!): getSemester!
+  searchFileBySemester(searchSemesterFile: SearchSemesterFile!): [searchFileBySemesterModel!]!
   getCategories: [getCategories!]!
   getNavMemu: [getNavMemu!]!
+}
+
+input FindSemesterDto {
+  id: String!
+}
+
+input SearchSemesterFile {
+  semester: String!
 }
 
 type Mutation {

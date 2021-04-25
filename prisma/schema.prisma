@@ -42,12 +42,13 @@ model Semester {
 }
 
 model Category {
-  id           Int           @unique @default(autoincrement())
-  categoryName String
-  isAvailable  Boolean?      @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now())
-  SubCategory  SubCategory[]
+  id             Int              @unique @default(autoincrement())
+  categoryName   String
+  isAvailable    Boolean?         @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  SubCategory    SubCategory[]
+  FileUploadData FileUploadData[]
 }
 
 model SubCategory {
@@ -65,11 +66,15 @@ model SubCategory {
 
 model FileUploadData {
   id            String      @unique @default(uuid())
-  index         Int?
+  index         String
   filename      String
   fileUrl       String
   Semester      Semester    @relation(references: [id], fields: [semesterId])
   SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
+  Topic         Topic       @relation(references: [id], fields: [TopicId])
+  Category      Category    @relation(references: [id], fields: [categoryId])
+  TopicId       Int
+  categoryId    Int
   semesterId    String
   subCategoryId Int
   authorId      String
@@ -104,13 +109,15 @@ model ChildrenNavigationMenu {
 }
 
 model Topic {
-  id            Int         @unique @default(autoincrement())
-  topicName     String?
-  topicDetails  String?
-  subCategoryId Int
-  subCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  id             Int              @unique @default(autoincrement())
+  topicName      String?
+  topicDetails   String?
+  subCategoryId  Int
+  subCategory    SubCategory      @relation(references: [id], fields: [subCategoryId])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  FileUploadData FileUploadData[]
+
 }
 
 enum UserLevel {

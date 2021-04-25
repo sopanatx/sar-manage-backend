@@ -24,7 +24,6 @@ export class CategoryService {
       },
     });
 
-    // this.prisma.subscribe
     return getCategories;
   }
 
