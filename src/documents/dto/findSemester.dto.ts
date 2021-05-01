@@ -5,5 +5,5 @@ import { IsString, IsUUID, MaxLength } from 'class-validator';
 export class FindSemesterDto {
   @Field()
   @IsUUID()
-  id: string;
+  semester: string;
 }
