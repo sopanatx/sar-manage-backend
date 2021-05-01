@@ -8,90 +8,119 @@ datasource db {
 }
 
 model Account {
-  id                  String           @id @default(uuid())
-  studentId           String?          @unique
-  studentFirstName    String
-  studentLastName     String
-  studentEmail        String           @unique
-  studentPassword     String?
-  studentPasswordSalt String?
-  refreshToken        String?
-  isActivate          Boolean          @default(false)
-  isBanned            Boolean?         @default(false)
-  loginAttempt        Int?             @default(0)
-  userLevel           userLevel        @default(STUDENT)
-  lastLogin           DateTime?
-  lineUserID          String?
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @default(now())
-  AccountInfo         AccountInfo?
-  StudentActivity     StudentActivity?
-  StudentGrade        StudentGrade?
+  id           String  @id @default(uuid())
+  username     String  @unique
+  password     String
+  passwordSalt String
+  email        String
+  userLevel    String?
+  fullname     String?
+  refreshToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
 }
 
-model AccountInfo {
-  id                String   @id @default(cuid())
-  accountId         String   @unique
-  nickname          String?
-  educateGroup      Int
-  graduateSchool    String?
-  admissionYear     Int?
-  profileImageUrl   String?
-  canContactAddress String?
-  currentAddress    String?
-  workAddress       String?
-  phoneNumber       String?
-  facebookAccount   String?
-  lineID            String?
-  privacyPermission Boolean  @default(true)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now())
-  Account           Account  @relation(fields: [accountId], references: [id])
+model PasswordReset {
+  id                 String   @id @default(uuid())
+  username           String
+  resetPasswordToken String   @unique
+  isValid            Boolean  @default(true)
+  requested          DateTime @default(now())
+  expired            DateTime @default(now())
 }
 
-model StudentActivity {
-  id                  String   @id @default(cuid())
-  accountId           String?  @unique
-  studentId           String?
-  activityAllCount    Int
-  activityJoinedCount Int
-  createdAt           DateTime @default(now())
-  Account             Account? @relation(fields: [accountId], references: [id])
+model Semester {
+  id             String           @unique @default(uuid())
+  semesterName   String           @unique
+  isAvailable    Boolean?         @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  // FileUploadData FileUploadData[]
+  FileUploadData FileUploadData[]
 }
 
-model StudentGrade {
-  id                    String   @id
-  StudentId             String
-  totalCredit           Float?
-  totalAverageGrade     Float?
-  totalMainSubjectGrade Float?
-  createdAt             DateTime @default(now())
-  accountId             String?  @unique
-  Account               Account? @relation(fields: [accountId], references: [id])
+model Category {
+  id             Int              @unique @default(autoincrement())
+  categoryName   String
+  isAvailable    Boolean?         @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  SubCategory    SubCategory[]
+  FileUploadData FileUploadData[]
 }
 
-model activityCalendar {
-  id                String   @id @default(uuid())
-  activityName      String?
-  activityDetail    String?
-  activityStartDate DateTime @default(now())
-  activityEndDate   DateTime @default(now())
-  activityLocation  String?
-  activityImage     String?
+model SubCategory {
+  id                     Int              @unique @default(autoincrement())
+  subCategoryName        String
+  subCategoryDescription String
+  isAvailable            Boolean?         @default(true)
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @default(now())
+  categories             Category         @relation(references: [id], fields: [categoryId])
+  FileUploadData         FileUploadData[]
+  categoryId             Int
+  Topic                  Topic[]
 }
 
-model news {
-  id          String   @id @default(uuid())
-  newsTitle   String?
-  newsDetails String?
-  newsImage   String?
-  newsUrl     String?
-  newsType    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+model FileUploadData {
+  id            String      @unique @default(uuid())
+  index         String
+  filename      String
+  fileUrl       String
+  Semester      Semester    @relation(references: [id], fields: [semesterId])
+  SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
+  Topic         Topic       @relation(references: [id], fields: [TopicId])
+  Category      Category    @relation(references: [id], fields: [categoryId])
+  TopicId       Int
+  categoryId    Int
+  semesterId    String
+  subCategoryId Int
+  authorId      String
+  isDeleted     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime    @default(now())
 }
 
-enum userLevel {
+model NavigationMenu {
+  id             Int        @unique @default(autoincrement())
+  navigationName String?
+  navigationUrl  String?
+  assignedRole   UserLevel?
+  isLocked       Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @default(now())
+
+  ChildrenNavigationMenu ChildrenNavigationMenu[]
+}
+
+model ChildrenNavigationMenu {
+  id               Int            @unique @default(autoincrement())
+  childrenName     String?
+  childrenUrl      String?
+  childrenDetails  String?
+  assignedRole     UserLevel?
+  isLocked         Boolean        @default(false)
+  NavigationMenuId Int
+  NavMenu          NavigationMenu @relation(references: [id], fields: [NavigationMenuId])
+
+}
+
+model Topic {
+  id             Int              @unique @default(autoincrement())
+  topicName      String?
+  topicDetails   String?
+  subCategoryId  Int
+  subCategory    SubCategory      @relation(references: [id], fields: [subCategoryId])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  FileUploadData FileUploadData[]
+
+}
+
+enum UserLevel {
   ADMIN
   STUDENT
   TEACHER
