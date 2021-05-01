@@ -7,10 +7,6 @@ import { RolesGuard } from './auth/strategy/roles.guard';
 import { graphqlUploadExpress } from 'graphql-upload';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  var corsOptions = {
-    origin: '<insert uri of front-end domain>',
-    credentials: true, // <-- REQUIRED backend setting
-  };
   app.enableCors();
   app.use(
     helmet({
@@ -20,7 +16,6 @@ async function bootstrap() {
   );
   app.use(helmet.xssFilter());
   app.use(helmet.hidePoweredBy());
-  //app.use(graphqlUploadExpress({ maxFileSize: 10000, maxFiles: 10 }));
   app.useGlobalPipes(
     new ValidationPipe({
       disableErrorMessages: false,

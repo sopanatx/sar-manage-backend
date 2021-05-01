@@ -36,10 +36,10 @@ export class DocumentsResolver {
   async findSemester(
     @Args('findSemesterDto') findSemesterDto: FindSemesterDto,
   ): Promise<getSemester> {
-    const { id } = findSemesterDto;
+    const { semester } = findSemesterDto;
     const getSemester = await this.prisma.semester.findUnique({
       where: {
-        id,
+        id: semester,
       },
     });
     return getSemester;

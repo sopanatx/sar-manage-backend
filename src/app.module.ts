@@ -13,7 +13,7 @@ import { CategoryModule } from './category/category.module';
 import { RolesGuard } from './auth/strategy/roles.guard';
 import { NestMinioModule } from 'nestjs-minio';
 import { UploadController } from './upload/upload.controller';
-const isDevelopmentEnv = process.env.ENV == 'development' ?? (true || false);
+const isDevelopmentEnv = process.env.ENV == 'development' ? true : false;
 console.log({ isDevelopmentEnv });
 @Module({
   imports: [
@@ -25,7 +25,6 @@ console.log({ isDevelopmentEnv });
       installSubscriptionHandlers: true,
       context: ({ req }) => ({ req }),
       introspection: isDevelopmentEnv,
-      
     }),
     AuthModule,
     UserModule,

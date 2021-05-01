@@ -102,7 +102,7 @@ type Query {
 }
 
 input FindSemesterDto {
-  id: String!
+  semester: String!
 }
 
 input SearchSemesterFile {
