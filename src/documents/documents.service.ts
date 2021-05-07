@@ -110,6 +110,9 @@ export class DocumentsService {
           },
         },
       },
+      orderBy: {
+        categoryName: 'asc',
+      },
     });
 
     console.log(getFileByCategories);

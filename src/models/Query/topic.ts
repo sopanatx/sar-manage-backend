@@ -6,10 +6,10 @@ export class Topic {
   @Field()
   id: number;
 
-  @Field()
+  @Field({ nullable: true })
   topicName?: string;
 
-  @Field()
+  @Field({ nullable: true })
   topicDetails?: string;
 
   @Field()
