@@ -6,7 +6,8 @@ import { createWriteStream, stat } from 'fs';
 import * as path from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
-import { GetTopicBySubCategories } from './dto/getTopicBySubCategories';
+import { GetTopicBySubCategories } from './dto/getTopicBySubCategories.dto';
+import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
 import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { GetTopicDocumentModel } from './models/getTopicDocument.model';
@@ -108,5 +109,50 @@ export class DocumentsService {
       },
     });
     return getTopicList;
+  }
+
+  async getDocumentUploaded(
+    getUploadListByTopicDto: GetUploadListByTopicDto,
+    userId,
+  ): Promise<any> {
+    const {
+      topicId,
+      semester,
+      categoryId,
+      subCategoryId,
+    } = getUploadListByTopicDto;
+    if (!topicId) {
+      const getUploadList = await this.prisma.fileUploadData.findMany({
+        where: {
+          subCategoryId: subCategoryId,
+          authorId: userId,
+          semesterId: semester,
+        },
+        include: {
+          SubCategory: true,
+        },
+        orderBy: {
+          index: 'desc',
+        },
+      });
+      console.log(getUploadList);
+    } else {
+      const getUploadList = await this.prisma.fileUploadData.findMany({
+        where: {
+          subCategoryId: subCategoryId,
+          authorId: userId,
+          TopicId: topicId,
+          semesterId: semester,
+        },
+        include: {
+          SubCategory: true,
+        },
+        orderBy: {
+          index: 'desc',
+        },
+      });
+      console.log(getUploadList);
+    }
+    return true;
   }
 }

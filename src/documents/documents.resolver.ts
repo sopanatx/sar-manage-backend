@@ -12,9 +12,12 @@ import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { FindSemesterDto } from './dto/findSemester.dto';
 import { GetDocumentByCategories } from './dto/getDocumentByCategories';
-import { GetTopicBySubCategories } from './dto/getTopicBySubCategories';
+import { GetTopicBySubCategories } from './dto/getTopicBySubCategories.dto';
 import { GetTopicDocumentModel } from './models/getTopicDocument.model';
 import { TopicModel } from './models/Topic.Model';
+import { Arg } from 'type-graphql';
+import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
+import { Roles } from 'src/decorators/roles';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -100,5 +103,18 @@ export class DocumentsResolver {
     @Args('getTopicBySubCategories') getTopic: GetTopicBySubCategories,
   ): Promise<TopicModel[]> {
     return await this.documentService.getTopicDocument(getTopic);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  //@Roles('Admin')
+  @Query(() => Boolean)
+  async getUploadListTopic(
+    @Args('getUploadListByTopic') getUploadListByTopic: GetUploadListByTopicDto,
+    @GetUser() getUser,
+  ): Promise<any> {
+    return await this.documentService.getDocumentUploaded(
+      getUploadListByTopic,
+      getUser.id,
+    );
   }
 }

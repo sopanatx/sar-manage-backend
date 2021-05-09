@@ -15,6 +15,7 @@ import { ConflictException } from '@nestjs/common';
 import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
 import * as crypto from 'crypto';
+import { getUserTypesFromSchema } from '@graphql-tools/utils';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +59,10 @@ export class AuthService {
       throw new UnauthorizedException('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
 
     const accessToken = await this.jwtService.sign({
-      getUser,
+      id: getUser.id,
+      username: getUser.username,
+      fullname: getUser.fullname,
+      role: getUser.userLevel,
     });
     const refreshToken = await EncryptCipherText(
       getUser.fullname,

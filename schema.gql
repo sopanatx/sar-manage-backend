@@ -106,6 +106,7 @@ type Query {
   searchFileBySemester(searchSemesterFile: SearchSemesterFile!): [searchFileBySemesterModel!]!
   getDocumentByCategory(getDocumentByCategory: GetDocumentByCategories!): String!
   getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
+  getUploadListTopic(getUploadListByTopic: GetUploadListByTopicDto!): Boolean!
   getCategories: [getCategories!]!
   getNavMemu: [getNavMemu!]!
 }
@@ -123,6 +124,13 @@ input GetDocumentByCategories {
 }
 
 input GetTopicBySubCategories {
+  subCategoryId: Float!
+}
+
+input GetUploadListByTopicDto {
+  topicId: Float
+  semester: String!
+  categoryId: Float!
   subCategoryId: Float!
 }
 

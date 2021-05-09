@@ -71,9 +71,9 @@ model FileUploadData {
   fileUrl       String
   Semester      Semester    @relation(references: [id], fields: [semesterId])
   SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
-  Topic         Topic       @relation(references: [id], fields: [TopicId])
+  Topic         Topic?      @relation(references: [id], fields: [TopicId])
   Category      Category    @relation(references: [id], fields: [categoryId])
-  TopicId       Int
+  TopicId       Int?
   categoryId    Int
   semesterId    String
   subCategoryId Int
@@ -81,7 +81,7 @@ model FileUploadData {
   isDeleted     Boolean     @default(false)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
-  deletedAt     DateTime    @default(now())
+  deletedAt     DateTime?
 }
 
 model NavigationMenu {
