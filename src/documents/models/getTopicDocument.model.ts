@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { TopicModel } from './Topic.Model';
+import { TopicModel } from './Topic.model';
 @ObjectType()
 export class GetTopicDocumentModel {
   // @Field()
