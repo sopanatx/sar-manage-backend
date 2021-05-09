@@ -11,6 +11,10 @@ import { CheckSemesterDto } from './dto/checkSemester.dto';
 import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { FindSemesterDto } from './dto/findSemester.dto';
+import { GetDocumentByCategories } from './dto/getDocumentByCategories';
+import { GetTopicBySubCategories } from './dto/getTopicBySubCategories';
+import { GetTopicDocumentModel } from './models/getTopicDocument.model';
+import { TopicModel } from './models/Topic.Model';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -79,5 +83,22 @@ export class DocumentsResolver {
     @Args('searchSemesterFile') searchSemesterFile: SearchSemesterFile,
   ): Promise<searchFileBySemesterModel[]> {
     return await this.documentService.searchFileByName(searchSemesterFile);
+  }
+
+  @Query(() => String)
+  async getDocumentByCategory(
+    @Args('getDocumentByCategory') getDocument: GetDocumentByCategories,
+  ): Promise<any> {
+    const { documentId } = getDocument;
+
+    return documentId;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [TopicModel])
+  async getTopicBySubCategories(
+    @Args('getTopicBySubCategories') getTopic: GetTopicBySubCategories,
+  ): Promise<TopicModel[]> {
+    return await this.documentService.getTopicDocument(getTopic);
   }
 }

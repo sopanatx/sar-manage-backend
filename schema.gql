@@ -44,10 +44,17 @@ type searchFileBySemesterModel {
   FileUploadData: [FileUploadDataByName!]
 }
 
+type TopicModel {
+  topicName: String
+  topicDetails: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Topic {
   id: Float!
-  topicName: String!
-  topicDetails: String!
+  topicName: String
+  topicDetails: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -97,6 +104,8 @@ type Query {
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
   searchFileBySemester(searchSemesterFile: SearchSemesterFile!): [searchFileBySemesterModel!]!
+  getDocumentByCategory(getDocumentByCategory: GetDocumentByCategories!): String!
+  getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
   getCategories: [getCategories!]!
   getNavMemu: [getNavMemu!]!
 }
@@ -107,6 +116,14 @@ input FindSemesterDto {
 
 input SearchSemesterFile {
   semester: String!
+}
+
+input GetDocumentByCategories {
+  documentId: Float!
+}
+
+input GetTopicBySubCategories {
+  subCategoryId: Float!
 }
 
 type Mutation {

@@ -6,8 +6,11 @@ import { createWriteStream, stat } from 'fs';
 import * as path from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
+import { GetTopicBySubCategories } from './dto/getTopicBySubCategories';
 import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
+import { GetTopicDocumentModel } from './models/getTopicDocument.model';
+import { TopicModel } from './models/Topic.Model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -77,29 +80,6 @@ export class DocumentsService {
   ): Promise<searchFileBySemesterModel[]> {
     const { semester } = searchFileByName;
     console.log(semester);
-    // const getFile = await this.prisma.fileUploadData.findMany({
-    //   where: {
-    //     semesterId: semester,
-    //     isDeleted: false,
-    //   },
-    //   include: {
-    //     Semester: {
-    //       select: {
-    //         semesterName: true,
-    //       },
-    //     },
-    //     SubCategory: {
-    //       select: {
-    //         subCategoryName: true,
-    //       },
-    //     },
-    //     Topic: {
-    //       select: {
-    //         topicName: true,
-    //       },
-    //     },
-    //   },
-    // });
 
     const getFileByCategories = await this.prisma.category.findMany({
       include: {
@@ -116,7 +96,17 @@ export class DocumentsService {
     });
 
     console.log(getFileByCategories);
-    //   console.log(getFile);
     return getFileByCategories;
+  }
+  async getTopicDocument(
+    getTopic: GetTopicBySubCategories,
+  ): Promise<TopicModel[]> {
+    const { subCategoryId } = getTopic;
+    const getTopicList = await this.prisma.topic.findMany({
+      where: {
+        subCategoryId,
+      },
+    });
+    return getTopicList;
   }
 }
