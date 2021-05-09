@@ -11,7 +11,7 @@ import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
 import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { GetTopicDocumentModel } from './models/getTopicDocument.model';
-import { TopicModel } from './models/Topic.Model';
+import { TopicModel } from './models/Topic.model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
