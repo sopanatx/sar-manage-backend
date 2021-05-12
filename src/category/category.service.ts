@@ -20,6 +20,7 @@ export class CategoryService {
         },
       },
       orderBy: {
+        id: 'asc',
         categoryName: 'asc',
       },
     });
