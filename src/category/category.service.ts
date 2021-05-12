@@ -17,11 +17,13 @@ export class CategoryService {
           include: {
             Topic: true,
           },
+          orderBy: {
+            id: 'asc',
+          },
         },
       },
       orderBy: {
         id: 'asc',
-      ///กก  categoryName: 'asc',
       },
     });
 
