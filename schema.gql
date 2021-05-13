@@ -98,6 +98,11 @@ type getNavMemu {
   ChildrenNavigationMenu: [childrenNav!]
 }
 
+type HasTopicListModel {
+  hasTopicList: Boolean!
+  topicCount: Float!
+}
+
 type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
@@ -108,6 +113,7 @@ type Query {
   getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
   getUploadListTopic(getUploadListByTopic: GetUploadListByTopicDto!): Boolean!
   getCategories: [getCategories!]!
+  getHasTopicList(getHasTopicList: HasTopicListDto!): HasTopicListModel!
   getNavMemu: [getNavMemu!]!
 }
 
@@ -131,6 +137,10 @@ input GetUploadListByTopicDto {
   topicId: Float
   semester: String!
   categoryId: Float!
+  subCategoryId: Float!
+}
+
+input HasTopicListDto {
   subCategoryId: Float!
 }
 

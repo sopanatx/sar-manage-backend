@@ -7,6 +7,8 @@ import { getCategories } from 'src/models/Query/getCategories';
 import { getNavMemu } from 'src/models/Query/getNavMenu';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { CategoryService } from './category.service';
+import { HasTopicListDto } from './dto/hasTopicList.dto';
+import { HasTopicListModel } from './model/hasTopicList.model';
 
 @Resolver()
 export class CategoryResolver {
@@ -17,6 +19,13 @@ export class CategoryResolver {
   @Query(() => [getCategories])
   async getCategories(@GetUser() getUser): Promise<getCategories[]> {
     return this.categoryService.getCategories();
+  }
+
+  @Query(() => HasTopicListModel)
+  async getHasTopicList(
+    @Args('getHasTopicList') getHasTopicList: HasTopicListDto,
+  ): Promise<HasTopicListModel> {
+    return await this.categoryService.getHasTopicList(getHasTopicList);
   }
 
   @Query(() => [getNavMemu])

@@ -115,12 +115,8 @@ export class DocumentsService {
     getUploadListByTopicDto: GetUploadListByTopicDto,
     userId,
   ): Promise<any> {
-    const {
-      topicId,
-      semester,
-      categoryId,
-      subCategoryId,
-    } = getUploadListByTopicDto;
+    const { topicId, semester, categoryId, subCategoryId } =
+      getUploadListByTopicDto;
     if (!topicId) {
       const getUploadList = await this.prisma.fileUploadData.findMany({
         where: {
