@@ -1,10 +1,39 @@
-import { InputType } from '@nestjs/graphql';
-import { IsNumber, IsString, MaxLength } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import {
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 import { FileUpload } from 'src/scalars/upload.scalar';
-import { Field } from 'type-graphql';
 
 @InputType()
-export class uploadDocument {
+export class UploadDocumentDto {
   @Field()
-  file: FileUpload;
+  @IsString()
+  title: string;
+
+  @Field()
+  @IsString()
+  index: string;
+
+  @Field()
+  @IsUUID()
+  semesterId: string;
+
+  @Field()
+  @IsInt()
+  subCategoryId: number;
+
+  @Field()
+  @IsOptional()
+  @IsInt()
+  topicId: number;
+
+  @Field()
+  @IsOptional()
+  @IsInt()
+  categoryId: number;
 }

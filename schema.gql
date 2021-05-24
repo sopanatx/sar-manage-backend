@@ -148,7 +148,7 @@ type Mutation {
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
-  uploadFile(file: Upload!): Boolean!
+  uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
 }
 
@@ -166,6 +166,15 @@ input LocalAuthRegisterDto {
 
 input PasswordResetDto {
   username: String!
+}
+
+input UploadDocumentDto {
+  title: String!
+  index: String!
+  semesterId: String!
+  subCategoryId: Float!
+  topicId: Float!
+  categoryId: Float!
 }
 
 """The `Upload` scalar type represents a file upload."""

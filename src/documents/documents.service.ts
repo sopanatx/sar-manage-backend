@@ -1,4 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { GraphQLUpload } from 'apollo-server-express';
@@ -20,10 +23,13 @@ export class DocumentsService {
     filename,
     mimetype,
     user,
+    UploadDocumentDto,
   ): Promise<boolean> {
+    const { title, index, semesterId, subCategoryId, topicId, categoryId } =
+      UploadDocumentDto;
     console.log(user);
     let ext = path.extname(filename);
-    console.log({ ext });
+    //  console.log({ ext });
     const allowedFileExtensions = [
       '.pdf',
       '.jpeg',
@@ -39,9 +45,9 @@ export class DocumentsService {
     //check file extension or mimetype is in allowed array]
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
-    filename = user.getUser.username + '_' + Date.now() + `_0` + ext;
-    console.log(mimetype);
-
+    filename = user.username + '_' + Date.now() + `_0` + ext;
+    //  console.log(mimetype);
+    //
     const fileStream = createReadStream(filename);
 
     try {
@@ -57,7 +63,7 @@ export class DocumentsService {
           }
           console.log(
             'Successfully uploaded to storage.itpsru.in.th --> user: %s filename:',
-            user.getUser.username,
+            user.username,
             filename,
           );
         },
@@ -68,12 +74,40 @@ export class DocumentsService {
       );
     }
 
-    return new Promise(async (resolve, reject) =>
-      createReadStream()
-        .pipe(createWriteStream(`./tmp/${filename}`))
-        .on('finish', () => resolve(true))
-        .on('error', () => reject(false)),
-    );
+    try {
+      const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
+        where: {
+          TopicId: topicId,
+          index: index,
+        },
+      });
+      if (checkIsReplaceIndex.length > 0) throw new ConflictException();
+      const createFileList = await this.prisma.fileUploadData.create({
+        data: {
+          index,
+          filename: title,
+          fileUrl: '',
+          semesterId: semesterId,
+          subCategoryId: +subCategoryId,
+          TopicId: topicId,
+          categoryId: categoryId,
+          authorId: user.id,
+        },
+      });
+
+      return true;
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException(
+        'ไม่สามารถอัปโหลดเอกสารได้ เนื่องจากข้อผิดพลาดบางประการ โปรดตรวจสอบว่าลำดับ / ชื่อเอกสารถูกต้องหรือไม่',
+      );
+    }
+    // return new Promise(async (resolve, reject) =>
+    //   createReadStream()
+    //     .pipe(createWriteStream(`./tmp/${filename}`))
+    //     .on('finish', () => resolve(true))
+    //     .on('error', () => reject(false)),
+    // );
   }
 
   async searchFileByName(

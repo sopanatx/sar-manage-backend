@@ -18,6 +18,7 @@ import { TopicModel } from './models/Topic.model';
 import { Arg } from 'type-graphql';
 import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
 import { Roles } from 'src/decorators/roles';
+import { UploadDocumentDto } from './dto/uploadDocuments';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -56,14 +57,23 @@ export class DocumentsResolver {
   @Mutation(() => Boolean)
   async uploadFile(
     @Args({ name: 'file', type: () => GraphQLUpload })
-    { createReadStream, filename, mimetype },
+    uploadData,
+    //  @Args('title') title: string,
+    // @Args('index') index: string,
+    // @Args('semester') semester: string,
+    //  @Args('topicId') topicId: string,
+    @Args('DocumentDetails') UploadDocumentDto: UploadDocumentDto,
+    // @Args('uploadDocumentDto') uploadDocumentDto: UploadDocumentDto,
     @GetUser() user,
   ): Promise<boolean> {
+    const { createReadStream, filename, mimetype } = uploadData;
+    console.log({ uploadData });
     return await this.documentService.fileUpload(
       createReadStream,
       filename,
       mimetype,
       user,
+      UploadDocumentDto,
     );
   }
 
