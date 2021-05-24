@@ -29,7 +29,6 @@ export class DocumentsService {
       UploadDocumentDto;
     console.log(user);
     let ext = path.extname(filename);
-    //  console.log({ ext });
     const allowedFileExtensions = [
       '.pdf',
       '.jpeg',
@@ -46,8 +45,6 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    //  console.log(mimetype);
-    //
     const fileStream = createReadStream(filename);
 
     try {
@@ -102,12 +99,6 @@ export class DocumentsService {
         'ไม่สามารถอัปโหลดเอกสารได้ เนื่องจากข้อผิดพลาดบางประการ โปรดตรวจสอบว่าลำดับ / ชื่อเอกสารถูกต้องหรือไม่',
       );
     }
-    // return new Promise(async (resolve, reject) =>
-    //   createReadStream()
-    //     .pipe(createWriteStream(`./tmp/${filename}`))
-    //     .on('finish', () => resolve(true))
-    //     .on('error', () => reject(false)),
-    // );
   }
 
   async searchFileByName(

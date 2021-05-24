@@ -58,12 +58,7 @@ export class DocumentsResolver {
   async uploadFile(
     @Args({ name: 'file', type: () => GraphQLUpload })
     uploadData,
-    //  @Args('title') title: string,
-    // @Args('index') index: string,
-    // @Args('semester') semester: string,
-    //  @Args('topicId') topicId: string,
     @Args('DocumentDetails') UploadDocumentDto: UploadDocumentDto,
-    // @Args('uploadDocumentDto') uploadDocumentDto: UploadDocumentDto,
     @GetUser() user,
   ): Promise<boolean> {
     const { createReadStream, filename, mimetype } = uploadData;
@@ -116,7 +111,6 @@ export class DocumentsResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  //@Roles('Admin')
   @Query(() => Boolean)
   async getUploadListTopic(
     @Args('getUploadListByTopic') getUploadListByTopic: GetUploadListByTopicDto,
