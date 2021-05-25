@@ -45,7 +45,7 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    const fileStream = createReadStream(filename);
+    const fileStream = await createReadStream(filename);
 
     try {
       await minioClient.putObject(

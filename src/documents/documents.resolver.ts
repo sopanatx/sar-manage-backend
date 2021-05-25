@@ -61,7 +61,7 @@ export class DocumentsResolver {
     @Args('DocumentDetails') UploadDocumentDto: UploadDocumentDto,
     @GetUser() user,
   ): Promise<boolean> {
-    const { createReadStream, filename, mimetype } = uploadData;
+    const { createReadStream, filename, mimetype } = await uploadData;
     console.log({ uploadData });
     return await this.documentService.fileUpload(
       createReadStream,
