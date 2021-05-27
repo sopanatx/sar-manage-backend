@@ -16,6 +16,7 @@ async function bootstrap() {
   );
   app.use(helmet.xssFilter());
   app.use(helmet.hidePoweredBy());
+  app.use(graphqlUploadExpress({ maxFileSize: 1000000000, maxFiles: 10 }));
   app.useGlobalPipes(
     new ValidationPipe({
       disableErrorMessages: false,
