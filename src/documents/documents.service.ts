@@ -5,7 +5,7 @@ import {
 import { BadRequestException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { GraphQLUpload } from 'apollo-server-express';
-import { createWriteStream, stat } from 'fs';
+import { createWriteStream, stat, fs } from 'fs';
 import * as path from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
@@ -45,7 +45,7 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    const fileStream = await createReadStream(filename);
+    const fileStream = await fs.createReadStream(filename);
 
     try {
       await minioClient.putObject(
