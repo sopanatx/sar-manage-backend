@@ -5,7 +5,7 @@ import {
 import { BadRequestException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { GraphQLUpload } from 'apollo-server-express';
-import { createWriteStream, stat, fs } from 'fs';
+import { createWriteStream, stat, createReadStream } from 'fs';
 import * as path from 'path';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
@@ -19,7 +19,7 @@ import { TopicModel } from './models/Topic.model';
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
   async fileUpload(
-    createReadStream,
+    stream,
     filename,
     mimetype,
     user,
@@ -45,7 +45,7 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    const fileStream = await fs.createReadStream(filename);
+    const fileStream = stream(filename);
 
     try {
       await minioClient.putObject(
@@ -66,6 +66,7 @@ export class DocumentsService {
         },
       );
     } catch (e) {
+      console.log(e);
       throw new InternalServerErrorException(
         'ไม่สามารถจัดเก็บไฟล์ใน Object Storage ได้. โปรดลองใหม่อีกครั้ง',
       );
