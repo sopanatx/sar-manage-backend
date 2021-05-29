@@ -45,8 +45,14 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    const fileStream = stream(filename);
-
+    //const fileStream = stream(filename);
+    new Promise(async (resolve, reject) =>
+      stream()
+        .pipe(createWriteStream(`./tmp/${filename}`))
+        .on('finish', () => resolve(true))
+        .on('error', () => reject(false)),
+    );
+    const fileStream = createReadStream(`./tmp/${filename}`);
     try {
       await minioClient.putObject(
         'sar-dev',
