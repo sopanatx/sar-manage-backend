@@ -5,9 +5,6 @@
   "author": "Sopanat Suradach",
   "private": true,
   "license": "LICENSED",
-  "engines": {
-    "node": "14.16.0"
-  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -120,5 +117,8 @@
   "resolutions": {
     "**/**/fs-capacitor": "^6.2.0",
     "**/graphql-upload": "^11.0.0"
+  },
+  "engines": {
+    "node": "14.16.0"
   }
 }
