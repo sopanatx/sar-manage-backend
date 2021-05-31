@@ -1,6 +1,6 @@
 {
   "name": "sar-manage-graphql",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "SAR Management Graphql Backend",
   "author": "Sopanat Suradach",
   "private": true,
