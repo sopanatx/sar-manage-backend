@@ -8,14 +8,14 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 # Install app dependencies
-RUN npm install --no-optional
+RUN yarn install --no-lockfile
 # Generate prisma client, leave out if generating in `postinstall` script
 RUN npx prisma generate
 
 COPY . .
 
-RUN npm run build
-RUN npm rebuild bcrypt --build-from-source
+RUN yarn run build
+RUN yarn rebuild bcrypt --build-from-source
 FROM node:14
 
 COPY --from=builder /app/node_modules ./node_modules
@@ -23,4 +23,4 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 
 EXPOSE 7001
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "yarn", "run", "start:prod" ]
