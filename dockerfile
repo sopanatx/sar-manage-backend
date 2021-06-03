@@ -1,13 +1,13 @@
-FROM node:16-alpine3.11 AS builder
+FROM node:14.17-alpine3.11 AS builder
 
 # Create app directory
 WORKDIR /app
-
+RUN npm install -g npm@7.15.1
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
 COPY prisma ./prisma/
 # Install app dependencies
-RUN npm install -g npm@7.15.1
+
 RUN npm install --no-optional
 # Generate prisma client, leave out if generating in `postinstall` script
 RUN npx prisma generate
