@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 # Install app dependencies
-
+RUN npm install -g npm@7.15.1
 RUN npm install --no-optional
 # Generate prisma client, leave out if generating in `postinstall` script
 RUN npx prisma generate
