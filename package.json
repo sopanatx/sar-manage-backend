@@ -36,6 +36,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/crypto-js": "^4.0.1",
     "@types/csurf": "^1.11.0",
+    "@types/express-serve-static-core": "^4.17.21",
     "@types/minio": "^7.0.7",
     "@types/multer": "^1.4.5",
     "@types/passport-jwt": "^3.0.5",
