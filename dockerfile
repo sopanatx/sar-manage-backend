@@ -1,4 +1,4 @@
-FROM node:14-alpine3.13 AS builder
+FROM node:14 AS builder
 
 # Create app directory
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY . .
 
 RUN npm run build
 RUN npm rebuild bcrypt --build-from-source
-FROM node:14-alpine3.13
+FROM node:14
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
