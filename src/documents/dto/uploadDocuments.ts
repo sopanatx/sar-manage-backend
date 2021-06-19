@@ -27,12 +27,12 @@ export class UploadDocumentDto {
   @IsInt()
   subCategoryId: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsOptional()
   @IsInt()
   topicId: number;
 
-  @Field()
+  @Field({ nullable: true })
   @IsOptional()
   @IsInt()
   categoryId: number;

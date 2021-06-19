@@ -67,8 +67,10 @@ model SubCategory {
 model FileUploadData {
   id            String      @unique @default(uuid())
   index         String
+  title         String?
   filename      String
   fileUrl       String
+  shortenUrl    String?
   Semester      Semester    @relation(references: [id], fields: [semesterId])
   SubCategory   SubCategory @relation(references: [id], fields: [subCategoryId])
   Topic         Topic?      @relation(references: [id], fields: [TopicId])

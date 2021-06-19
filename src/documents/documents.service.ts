@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { GraphQLUpload } from 'apollo-server-express';
 import { createWriteStream, stat, createReadStream } from 'fs';
 import * as path from 'path';
+import { getCategories } from 'src/models/Query/getCategories';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { minioClient } from '../service/minioClient';
 import { GetTopicBySubCategories } from './dto/getTopicBySubCategories.dto';
@@ -28,7 +29,7 @@ export class DocumentsService {
     const { title, index, semesterId, subCategoryId, topicId, categoryId } =
       UploadDocumentDto;
     console.log(user);
-    let ext = path.extname(filename);
+    const ext = path.extname(filename);
     const allowedFileExtensions = [
       '.pdf',
       '.jpeg',
@@ -78,18 +79,29 @@ export class DocumentsService {
         where: {
           TopicId: topicId,
           index: index,
+          authorId: user.id,
+          semesterId,
         },
       });
+      const getCategoryList = await this.prisma.subCategory.findUnique({
+        where: { id: subCategoryId },
+        include: {
+          categories: true,
+        },
+      });
+
+      console.log(getCategoryList);
       if (checkIsReplaceIndex.length > 0) throw new ConflictException();
       const createFileList = await this.prisma.fileUploadData.create({
         data: {
           index,
-          filename: title,
+          title: title,
+          filename: filename,
           fileUrl: '',
           semesterId: semesterId,
-          subCategoryId: +subCategoryId,
+          subCategoryId: getCategoryList.id,
           TopicId: topicId,
-          categoryId: categoryId,
+          categoryId: getCategoryList.categories.id,
           authorId: user.id,
         },
       });
@@ -98,7 +110,7 @@ export class DocumentsService {
     } catch (e) {
       console.log(e);
       throw new InternalServerErrorException(
-        'ไม่สามารถอัปโหลดเอกสารได้ เนื่องจากข้อผิดพลาดบางประการ โปรดตรวจสอบว่าลำดับ / ชื่อเอกสารถูกต้องหรือไม่',
+        'ไม่สามารถอัปโหลดเอกสารได้ โปรดตรวจสอบลำดับว่าซ้ำหรือใหม่',
       );
     }
   }
@@ -164,7 +176,7 @@ export class DocumentsService {
         where: {
           subCategoryId: subCategoryId,
           authorId: userId,
-          TopicId: topicId,
+          TopicId: topicId ? topicId : 0,
           semesterId: semester,
         },
         include: {
