@@ -3,22 +3,19 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
 import { getSemester } from 'src/models/Query/getSemester';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GraphQLUpload } from 'apollo-server-express';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { DocumentsService } from './documents.service';
-import { uploadFileModel } from './models/uploadFile.model';
 import { CheckSemesterDto } from './dto/checkSemester.dto';
 import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { FindSemesterDto } from './dto/findSemester.dto';
 import { GetDocumentByCategories } from './dto/getDocumentByCategories';
 import { GetTopicBySubCategories } from './dto/getTopicBySubCategories.dto';
-import { GetTopicDocumentModel } from './models/getTopicDocument.model';
 import { TopicModel } from './models/Topic.model';
-import { Arg } from 'type-graphql';
 import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
-import { Roles } from 'src/decorators/roles';
 import { UploadDocumentDto } from './dto/uploadDocuments';
+import { FileUpload } from 'graphql-upload';
+import { GraphQLUpload } from 'apollo-server-express';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -56,12 +53,12 @@ export class DocumentsResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Boolean)
   async uploadFile(
-    @Args({ name: 'file', type: () => GraphQLUpload })
-    uploadData,
+    @Args('file', { type: () => GraphQLUpload })
+    upload: FileUpload,
     @Args('DocumentDetails') UploadDocumentDto: UploadDocumentDto,
     @GetUser() user,
   ): Promise<boolean> {
-    const { createReadStream, filename, mimetype } = await uploadData;
+    const { createReadStream, filename, mimetype } = await upload;
 
     return await this.documentService.fileUpload(
       createReadStream,
