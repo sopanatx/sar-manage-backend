@@ -20,7 +20,7 @@ import { TopicModel } from './models/Topic.model';
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
   async fileUpload(
-    stream,
+    createReadStream,
     filename,
     mimetype,
     user,
@@ -46,11 +46,44 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-    const fileStream = await stream(filename);
 
-    //const fileStream = createReadStream()
-    try {
-      await minioClient.putObject(
+    const fileStream = createReadStream();
+    const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
+      where: {
+        TopicId: topicId,
+        index: index,
+        authorId: user.id,
+        semesterId,
+      },
+    });
+    const getCategoryList = await this.prisma.subCategory.findUnique({
+      where: { id: subCategoryId },
+      include: {
+        categories: true,
+      },
+    });
+
+    console.log(getCategoryList);
+    if (checkIsReplaceIndex.length > 0)
+      throw new ConflictException(
+        'หัวข้อดังกล่าวในปีการศึกษานี้มีเอกสารซ้ำอยู่แล้ว',
+      );
+    const createFileList = await this.prisma.fileUploadData.create({
+      data: {
+        index,
+        title: title,
+        filename: filename,
+        fileUrl: '',
+        semesterId: semesterId,
+        subCategoryId: getCategoryList.id,
+        TopicId: topicId,
+        categoryId: getCategoryList.categories.id,
+        authorId: user.id,
+      },
+    });
+
+    return await new Promise(async (resolve, reject) =>
+      minioClient.putObject(
         'sar-dev',
         filename,
         fileStream,
@@ -58,7 +91,9 @@ export class DocumentsService {
         // 'audio/ogg',
         function (e) {
           if (e) {
-            return console.log(e);
+            reject(false);
+          } else {
+            resolve(true);
           }
           console.log(
             'Successfully uploaded to storage.itpsru.in.th --> user: %s filename:',
@@ -66,53 +101,8 @@ export class DocumentsService {
             filename,
           );
         },
-      );
-    } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException(
-        'ไม่สามารถจัดเก็บไฟล์ใน Object Storage ได้. โปรดลองใหม่อีกครั้ง',
-      );
-    }
-
-    try {
-      const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
-        where: {
-          TopicId: topicId,
-          index: index,
-          authorId: user.id,
-          semesterId,
-        },
-      });
-      const getCategoryList = await this.prisma.subCategory.findUnique({
-        where: { id: subCategoryId },
-        include: {
-          categories: true,
-        },
-      });
-
-      console.log(getCategoryList);
-      if (checkIsReplaceIndex.length > 0) throw new ConflictException();
-      const createFileList = await this.prisma.fileUploadData.create({
-        data: {
-          index,
-          title: title,
-          filename: filename,
-          fileUrl: '',
-          semesterId: semesterId,
-          subCategoryId: getCategoryList.id,
-          TopicId: topicId,
-          categoryId: getCategoryList.categories.id,
-          authorId: user.id,
-        },
-      });
-
-      return true;
-    } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException(
-        'ไม่สามารถอัปโหลดเอกสารได้ โปรดตรวจสอบลำดับว่าซ้ำหรือใหม่',
-      );
-    }
+      ),
+    );
   }
 
   async searchFileByName(
