@@ -47,7 +47,6 @@ export class DocumentsService {
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
 
-    const fileStream = createReadStream();
     const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
       where: {
         TopicId: topicId,
@@ -86,7 +85,7 @@ export class DocumentsService {
       minioClient.putObject(
         'sar-dev',
         filename,
-        fileStream,
+        createReadStream(),
         //    stat.size,
         // 'audio/ogg',
         function (e) {
