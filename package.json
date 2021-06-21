@@ -67,7 +67,8 @@
     "ts-morph": "^10.0.2",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.31",
-    "uuidv4": "^6.2.7"
+    "uuidv4": "^6.2.7",
+    "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@nestjs/schematics": "^7.3.0",

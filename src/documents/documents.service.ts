@@ -16,6 +16,7 @@ import { SearchSemesterFile } from './dto/searchSemesterFile';
 import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { GetTopicDocumentModel } from './models/getTopicDocument.model';
 import { TopicModel } from './models/Topic.model';
+import * as zlib from 'zlib';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -81,11 +82,12 @@ export class DocumentsService {
       },
     });
 
+    const gzipFile = createReadStream().pipe(zlib.createGzip());
     return await new Promise(async (resolve, reject) =>
       minioClient.putObject(
         'sar-dev',
         filename,
-        createReadStream(),
+        gzipFile,
         //    stat.size,
         // 'audio/ogg',
         function (e) {
