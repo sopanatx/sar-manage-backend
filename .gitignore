@@ -40,3 +40,5 @@ lerna-debug.log*
 .env
 /tmp
 tmp/*
+.aws/credentials
+.aws/serverless.yml
