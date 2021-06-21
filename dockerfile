@@ -1,4 +1,4 @@
-FROM node:12.18.4 AS builder
+FROM node:lts-alpine AS builder
 
 # Create app directory
 WORKDIR /app
@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY prisma ./prisma/
 # Install app dependencies
 
-RUN npm install --no-optional
+RUN npm install --no-optional --no-bin-links
 # Generate prisma client, leave out if generating in `postinstall` script
 RUN npx prisma generate
 
