@@ -82,7 +82,7 @@ export class DocumentsService {
       },
     });
 
-    const gzipFile = createReadStream().pipe(zlib.createGzip());
+    const gzipFile = await createReadStream();
     return await new Promise(async (resolve, reject) =>
       minioClient.putObject(
         'sar-dev',
