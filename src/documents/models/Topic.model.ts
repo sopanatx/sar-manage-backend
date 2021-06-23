@@ -1,6 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class TopicModel {
+  @Field()
+  id: number;
+
   @Field({ nullable: true })
   topicName: string;
 

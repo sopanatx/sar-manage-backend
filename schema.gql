@@ -72,6 +72,7 @@ type searchFileBySemesterModel {
 }
 
 type TopicModel {
+  id: Float!
   topicName: String
   topicDetails: String
   createdAt: DateTime!

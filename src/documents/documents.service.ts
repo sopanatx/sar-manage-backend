@@ -138,6 +138,7 @@ export class DocumentsService {
         subCategoryId,
       },
     });
+    console.log(getTopicList);
     return getTopicList;
   }
 
