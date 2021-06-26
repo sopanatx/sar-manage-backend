@@ -16,6 +16,7 @@ import { GetUploadListByTopicDto } from './dto/getUploadListByTopic.dto';
 import { UploadDocumentDto } from './dto/uploadDocuments';
 import { FileUpload } from 'graphql-upload';
 import { GraphQLUpload } from 'apollo-server-express';
+import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -117,5 +118,14 @@ export class DocumentsResolver {
       getUploadListByTopic,
       getUser.id,
     );
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => Boolean)
+  async getDocumentBySubCategory(
+    @Args('GetDocumentBySubCategory')
+    getDocumentBySubCategory: GetDocumentBySubCategory,
+  ): Promise<any> {
+    return true;
   }
 }
