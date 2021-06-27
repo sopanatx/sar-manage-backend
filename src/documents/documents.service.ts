@@ -189,20 +189,17 @@ export class DocumentsService {
     getDocumentBySubCategory: GetDocumentBySubCategory,
     getUser,
   ): Promise<DocumentFileList[]> {
-    const { subCategoryId,semesterId } = getDocumentBySubCategory;
+    const { subCategoryId, semesterId } = getDocumentBySubCategory;
     const getDoc = await this.prisma.fileUploadData.findMany({
       where: {
         subCategoryId,
         semesterId,
         authorId: getUser.id,
-        
       },
       include: {
         SubCategory: true,
       },
     });
-
-    console.log(getDoc);
     return getDoc;
   }
 }
