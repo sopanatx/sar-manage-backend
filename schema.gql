@@ -79,6 +79,34 @@ type TopicModel {
   updatedAt: DateTime!
 }
 
+type SubCategory {
+  id: Float!
+  subCategoryName: String!
+  subCategoryDescription: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DocumentFileList {
+  id: String!
+  index: String!
+  title: String!
+  filename: String!
+  fileUrl: String
+  shortenUrl: String
+  TopicId: Float!
+  categoryId: Float!
+  semesterId: String!
+  subCategoryId: Float!
+  authorId: String!
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  SubCategory: SubCategory
+}
+
 type childrenNav {
   id: Float!
   childrenName: String
@@ -113,7 +141,7 @@ type Query {
   getDocumentByCategory(getDocumentByCategory: GetDocumentByCategories!): String!
   getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
   getUploadListTopic(getUploadListByTopic: GetUploadListByTopicDto!): Boolean!
-  getDocumentBySubCategory(GetDocumentBySubCategory: GetDocumentBySubCategory!): Boolean!
+  getDocumentBySubCategory(GetDocumentBySubCategory: GetDocumentBySubCategory!): [DocumentFileList!]!
   getCategories: [getCategories!]!
   getHasTopicList(getHasTopicList: HasTopicListDto!): HasTopicListModel!
   getNavMemu: [getNavMemu!]!
@@ -144,6 +172,7 @@ input GetUploadListByTopicDto {
 
 input GetDocumentBySubCategory {
   subCategoryId: Float!
+  semesterId: String
 }
 
 input HasTopicListDto {
