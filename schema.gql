@@ -18,6 +18,20 @@ type PasswordResetResponseModel {
   statusMessage: String!
 }
 
+type MyAccountModel {
+  id: String!
+  username: String!
+  email: String!
+  fullname: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type getSemester {
   id: String
   semesterName: String
@@ -25,11 +39,6 @@ type getSemester {
   createdAt: DateTime
   updatedAt: DateTime
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Topic {
   id: Float!
@@ -135,6 +144,7 @@ type HasTopicListModel {
 type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
+  MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
   searchFileBySemester(searchSemesterFile: SearchSemesterFile!): [searchFileBySemesterModel!]!

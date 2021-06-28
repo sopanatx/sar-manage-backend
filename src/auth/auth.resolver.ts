@@ -17,6 +17,7 @@ import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetRes
 import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { UserIp } from 'src/decorators/getIP';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
+import { MyAccountModel } from './model/myaccount.model';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -54,5 +55,11 @@ export class AuthResolver {
     @GetUser() getUser,
   ): Promise<Boolean> {
     return await this.authService.UpdateAccountInfo(updateAccountDto, getUser);
+  }
+
+  @Query(() => MyAccountModel)
+  @UseGuards(GqlAuthGuard)
+  async MyAccountInfo(@GetUser() getUser): Promise<MyAccountModel> {
+    return await this.authService.MyProfileInfo(getUser);
   }
 }
