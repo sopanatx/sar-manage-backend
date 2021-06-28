@@ -183,6 +183,7 @@ type Mutation {
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
+  UpdateAccountInfo(UpdateAccount: UpdateAccountDto!): Boolean!
   uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
 }
@@ -201,6 +202,12 @@ input LocalAuthRegisterDto {
 
 input PasswordResetDto {
   username: String!
+}
+
+input UpdateAccountDto {
+  fullname: String
+  username: String
+  password: String
 }
 
 input UploadDocumentDto {
