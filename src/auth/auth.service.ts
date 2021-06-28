@@ -16,6 +16,7 @@ import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
 import * as crypto from 'crypto';
 import { getUserTypesFromSchema } from '@graphql-tools/utils';
+import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 
 @Injectable()
 export class AuthService {
@@ -172,6 +173,41 @@ export class AuthService {
       throw new InternalServerErrorException(
         'เซิร์ฟเวอร์ไม่สามารถประมวลผลคำขอนี้ได้ (Server Error)',
       );
+    }
+  }
+
+  async UpdateAccountInfo(
+    updateAccountDto: UpdateAccountDto,
+    getUser,
+  ): Promise<boolean> {
+    const { fullname, username, password } = updateAccountDto;
+    try {
+      if (password) {
+        const salt = await bcrypt.genSalt();
+        const hash = await bcrypt.hash(password, salt);
+        await this.prisma.account.update({
+          where: {
+            id: getUser.id,
+          },
+          data: {
+            password: hash,
+            passwordSalt: salt,
+          },
+        });
+      }
+
+      const updateAccount = await this.prisma.account.update({
+        where: {
+          id: getUser.id,
+        },
+        data: {
+          fullname,
+          username,
+        },
+      });
+      return true;
+    } catch {
+      return false;
     }
   }
 }

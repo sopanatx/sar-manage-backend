@@ -17,6 +17,8 @@ import { searchFileBySemesterModel } from './model/searchFileBySemester';
 import { GetTopicDocumentModel } from './models/getTopicDocument.model';
 import { TopicModel } from './models/Topic.model';
 import * as zlib from 'zlib';
+import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
+import { DocumentFileList } from './model/DocumentFileList.model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -181,5 +183,23 @@ export class DocumentsService {
       console.log(getUploadList);
     }
     return true;
+  }
+
+  async getDocumentBySubCategory(
+    getDocumentBySubCategory: GetDocumentBySubCategory,
+    getUser,
+  ): Promise<DocumentFileList[]> {
+    const { subCategoryId, semesterId } = getDocumentBySubCategory;
+    const getDoc = await this.prisma.fileUploadData.findMany({
+      where: {
+        subCategoryId,
+        semesterId,
+        authorId: getUser.id,
+      },
+      include: {
+        SubCategory: true,
+      },
+    });
+    return getDoc;
   }
 }

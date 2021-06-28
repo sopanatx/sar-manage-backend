@@ -16,6 +16,7 @@ import { AuthenticationError } from 'apollo-server';
 import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetResponse.model';
 import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { UserIp } from 'src/decorators/getIP';
+import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -44,5 +45,14 @@ export class AuthResolver {
   ): Promise<PasswordResetResponseModel> {
     console.log('Password Requested From IP:', ip);
     return this.authService.PasswordReset(passwordResetDto);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GqlAuthGuard)
+  async UpdateAccountInfo(
+    @Args('UpdateAccount') updateAccountDto: UpdateAccountDto,
+    @GetUser() getUser,
+  ): Promise<Boolean> {
+    return await this.authService.UpdateAccountInfo(updateAccountDto, getUser);
   }
 }
