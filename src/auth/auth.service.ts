@@ -17,6 +17,7 @@ import { PasswordResetResponseModel } from 'src/models/Response/PasswordResetRes
 import * as crypto from 'crypto';
 import { getUserTypesFromSchema } from '@graphql-tools/utils';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
+import { MyAccountModel } from './model/myaccount.model';
 
 @Injectable()
 export class AuthService {
@@ -209,5 +210,25 @@ export class AuthService {
     } catch {
       return false;
     }
+  }
+
+  async MyProfileInfo(getUser): Promise<MyAccountModel> {
+    const { id } = getUser;
+
+    const getAccountInfo = await this.prisma.account.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        fullname: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    if (!getAccountInfo) throw new NotFoundException();
+    return getAccountInfo;
   }
 }
