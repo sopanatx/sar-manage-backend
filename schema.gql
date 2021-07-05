@@ -141,9 +141,20 @@ type HasTopicListModel {
   topicCount: Float!
 }
 
+type UserModel {
+  id: String!
+  username: String!
+  email: String!
+  fullname: String!
+  userLevel: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
+  AdminGetAllUser: [UserModel!]!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
@@ -196,6 +207,7 @@ type Mutation {
   UpdateAccountInfo(UpdateAccount: UpdateAccountDto!): Boolean!
   uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
+  UpdateDocument(UpdateDocumentDto: UpdateDocumentDto!): Boolean!
 }
 
 input LocalAuthDto {
@@ -234,4 +246,9 @@ scalar Upload
 
 input CheckSemesterDto {
   semester: String!
+}
+
+input UpdateDocumentDto {
+  semesterId: String!
+  documentId: String!
 }
