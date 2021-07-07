@@ -201,6 +201,7 @@ input HasTopicListDto {
 }
 
 type Mutation {
+  AdminUpdateUser(AdminUpdateUser: AdminUpdateUserDto!): UserModel!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -208,6 +209,14 @@ type Mutation {
   uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
   UpdateDocument(UpdateDocumentDto: UpdateDocumentDto!): Boolean!
+}
+
+input AdminUpdateUserDto {
+  userId: String!
+  fullname: String
+  email: String
+  username: String
+  userLevel: String
 }
 
 input LocalAuthDto {

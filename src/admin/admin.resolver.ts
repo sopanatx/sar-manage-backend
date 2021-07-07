@@ -1,10 +1,11 @@
 import { UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
 import { RolesGuard } from 'src/auth/strategy/roles.guard';
 import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
+import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { UserModel } from './models/User.model';
 
 @Resolver()
@@ -29,5 +30,18 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminGetAllUserService();
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => UserModel)
+  async AdminUpdateUser(
+    @Args('AdminUpdateUser') adminUpdateUserDto: AdminUpdateUserDto,
+    @GetUser() getUser,
+  ): Promise<UserModel> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminUpdateUser(adminUpdateUserDto);
   }
 }
