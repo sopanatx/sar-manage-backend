@@ -12,7 +12,6 @@ import { UserModel } from './models/User.model';
 /*
 TODO:
 
-- Find all user and edit user infomation
 - Add user and then send credentials email to user
 - Get All user file and Counter
 - Add Semester
@@ -43,5 +42,12 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminUpdateUser(adminUpdateUserDto);
+  }
+
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminCreateUser():Promise<boolean>{
+    return true
   }
 }

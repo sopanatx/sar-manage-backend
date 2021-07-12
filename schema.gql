@@ -202,6 +202,7 @@ input HasTopicListDto {
 
 type Mutation {
   AdminUpdateUser(AdminUpdateUser: AdminUpdateUserDto!): UserModel!
+  AdminCreateUser: Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!

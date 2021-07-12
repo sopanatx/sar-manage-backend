@@ -19,6 +19,7 @@ import { TopicModel } from './models/Topic.model';
 import * as zlib from 'zlib';
 import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 import { DocumentFileList } from './model/DocumentFileList.model';
+import { UpdateDocumentDto } from './dto/UpdateDocument.dto';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -201,5 +202,11 @@ export class DocumentsService {
       },
     });
     return getDoc;
+  }
+
+  async UpdateDocument(updateDocumentDto: UpdateDocumentDto): Promise<boolean> {
+    const { semesterId, documentId } = updateDocumentDto;
+
+    return true;
   }
 }
