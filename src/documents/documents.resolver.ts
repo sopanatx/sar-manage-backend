@@ -18,6 +18,7 @@ import { FileUpload } from 'graphql-upload';
 import { GraphQLUpload } from 'apollo-server-express';
 import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 import { DocumentFileList } from './model/DocumentFileList.model';
+import { UpdateDocumentDto } from './dto/UpdateDocument.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -32,6 +33,9 @@ export class DocumentsResolver {
     const getSemester = await this.prisma.semester.findMany({
       orderBy: {
         semesterName: 'desc',
+      },
+      where: {
+        isAvailable: true,
       },
     });
     if (!getSemester) throw new NotFoundException('ไม่พบข้อมูลในระบบ');
@@ -132,5 +136,16 @@ export class DocumentsResolver {
       getDocumentBySubCategory,
       getUser,
     );
+  }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async UpdateDocument(
+    @Args('UpdateDocumentDto') updateDocument: UpdateDocumentDto,
+  ): Promise<any> {
+    const { semesterId, documentId } = updateDocument;
+
+    console.log(semesterId, documentId);
+
+    return true;
   }
 }

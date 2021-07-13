@@ -13,6 +13,9 @@ import { CategoryModule } from './category/category.module';
 import { RolesGuard } from './auth/strategy/roles.guard';
 import { NestMinioModule } from 'nestjs-minio';
 import { UploadController } from './upload/upload.controller';
+import { AdminResolver } from './admin/admin.resolver';
+import { AdminService } from './admin/admin.service';
+
 const isDevelopmentEnv = process.env.ENV == 'development' ? true : false;
 console.log({ isDevelopmentEnv });
 @Module({
@@ -40,6 +43,8 @@ console.log({ isDevelopmentEnv });
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    AdminResolver,
+    AdminService,
     //    FileUpload,
   ],
   controllers: [UploadController],
