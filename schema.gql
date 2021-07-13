@@ -202,7 +202,7 @@ input HasTopicListDto {
 
 type Mutation {
   AdminUpdateUser(AdminUpdateUser: AdminUpdateUserDto!): UserModel!
-  AdminCreateUser: Boolean!
+  AdminCreateUser(AdminCreateUserDto: AdminCreateUserDto!): Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -218,6 +218,13 @@ input AdminUpdateUserDto {
   email: String
   username: String
   userLevel: String
+}
+
+input AdminCreateUserDto {
+  username: String!
+  password: String!
+  fullname: String!
+  email: String!
 }
 
 input LocalAuthDto {

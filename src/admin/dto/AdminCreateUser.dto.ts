@@ -32,4 +32,8 @@ export class AdminCreateUserDto {
   @IsNotEmpty()
   @Field()
   email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  userLevel: string;
 }
