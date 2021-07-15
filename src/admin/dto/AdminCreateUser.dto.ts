@@ -35,5 +35,6 @@ export class AdminCreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @Field()
   userLevel: string;
 }
