@@ -155,6 +155,7 @@ type Query {
   sayHello: String!
   getServiceStatus: getServiceStatus!
   AdminGetAllUser: [UserModel!]!
+  AdminGetUser(AdminGetUserDto: AdminGetUserDto!): UserModel!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
@@ -166,6 +167,10 @@ type Query {
   getCategories: [getCategories!]!
   getHasTopicList(getHasTopicList: HasTopicListDto!): HasTopicListModel!
   getNavMemu: [getNavMemu!]!
+}
+
+input AdminGetUserDto {
+  userId: String!
 }
 
 input FindSemesterDto {
@@ -225,6 +230,7 @@ input AdminCreateUserDto {
   password: String!
   fullname: String!
   email: String!
+  userLevel: String!
 }
 
 input LocalAuthDto {

@@ -2,12 +2,14 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { UserModel } from './models/User.model';
 import * as bcrypt from 'bcrypt';
+import { AdminGetUserDto } from './dto/AdminGetUser';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -78,5 +80,25 @@ export class AdminService {
     } catch {
       throw new InternalServerErrorException();
     }
+  }
+
+  async AdminGetUser(adminGetUser: AdminGetUserDto): Promise<UserModel> {
+    const { userId } = adminGetUser;
+    const getUser = await this.prisma.account.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        fullname: true,
+        userLevel: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    if (!getUser) throw new NotFoundException('User does not exist.');
+    return getUser;
   }
 }
