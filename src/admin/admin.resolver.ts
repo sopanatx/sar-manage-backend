@@ -6,6 +6,7 @@ import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
+import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { UserModel } from './models/User.model';
 
@@ -49,7 +50,25 @@ export class AdminResolver {
   @Mutation(() => Boolean)
   async AdminCreateUser(
     @Args('AdminCreateUserDto') adminCreateUser: AdminCreateUserDto,
+    @GetUser() getUser,
   ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
     return await this.adminService.AdminCreateUser(adminCreateUser);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => UserModel)
+  async AdminGetUser(
+    @Args('AdminGetUserDto') adminGetUser: AdminGetUserDto,
+    @GetUser() getUser,
+  ): Promise<UserModel> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminGetUser(adminGetUser);
   }
 }
