@@ -1,5 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+} from 'class-validator';
 
 @InputType()
 export class AdminUpdateUserDto {
@@ -26,4 +33,9 @@ export class AdminUpdateUserDto {
   @IsString()
   @IsOptional()
   userLevel: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @MaxLength(255)
+  password: string;
 }

@@ -71,42 +71,48 @@ export class DocumentsService {
       throw new ConflictException(
         'หัวข้อดังกล่าวในปีการศึกษานี้มีเอกสารซ้ำอยู่แล้ว',
       );
-    const createFileList = await this.prisma.fileUploadData.create({
-      data: {
-        index,
-        title: title,
-        filename: filename,
-        fileUrl: '',
-        semesterId: semesterId,
-        subCategoryId: getCategoryList.id,
-        TopicId: topicId,
-        categoryId: getCategoryList.categories.id,
-        authorId: user.id,
-      },
-    });
-
-    const gzipFile = await createReadStream();
-    return await new Promise(async (resolve, reject) =>
-      minioClient.putObject(
-        'sar-dev',
-        filename,
-        gzipFile,
-        //    stat.size,
-        // 'audio/ogg',
-        function (e) {
-          if (e) {
-            reject(false);
-          } else {
-            resolve(true);
-          }
-          console.log(
-            'Successfully uploaded to storage.itpsru.in.th --> user: %s filename:',
-            user.username,
-            filename,
-          );
+    try {
+      const createFileList = await this.prisma.fileUploadData.create({
+        data: {
+          index,
+          title: title,
+          filename: filename,
+          fileUrl: '',
+          semesterId: semesterId,
+          subCategoryId: getCategoryList.id,
+          TopicId: topicId,
+          categoryId: getCategoryList.categories.id,
+          authorId: user.id,
         },
-      ),
-    );
+      });
+
+      const gzipFile = await createReadStream();
+      return await new Promise(async (resolve, reject) =>
+        minioClient.putObject(
+          'sar-dev',
+          filename,
+          gzipFile,
+          //    stat.size,
+          // 'audio/ogg',
+          function (e) {
+            if (e) {
+              reject(false);
+            } else {
+              resolve(true);
+            }
+            console.log(
+              'Successfully uploaded to storage.itpsru.in.th --> user: %s filename:',
+              user.username,
+              filename,
+            );
+          },
+        ),
+      );
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
   async searchFileByName(
