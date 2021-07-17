@@ -223,6 +223,7 @@ input AdminUpdateUserDto {
   email: String
   username: String
   userLevel: String
+  password: String
 }
 
 input AdminCreateUserDto {
