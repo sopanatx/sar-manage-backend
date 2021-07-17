@@ -19,6 +19,7 @@ import { GraphQLUpload } from 'apollo-server-express';
 import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 import { DocumentFileList } from './model/DocumentFileList.model';
 import { UpdateDocumentDto } from './dto/UpdateDocument.dto';
+import { semesterModel } from './model/semester.model';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -89,11 +90,26 @@ export class DocumentsResolver {
     return true;
   }
 
+  @UseGuards(GqlAuthGuard)
+  @Query(() => semesterModel)
+  async getSemesterById(
+    @Args('CheckSemesterDto') checkSemesterDto: CheckSemesterDto,
+  ): Promise<any> {
+    const { id } = checkSemesterDto;
+    return await this.prisma.semester.findUnique({ where: { id } });
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Query(() => [searchFileBySemesterModel])
   async searchFileBySemester(
     @Args('searchSemesterFile') searchSemesterFile: SearchSemesterFile,
+    @GetUser() getUser,
   ): Promise<searchFileBySemesterModel[]> {
-    return await this.documentService.searchFileByName(searchSemesterFile);
+    console.log(getUser);
+    return await this.documentService.searchFileByName(
+      searchSemesterFile,
+      getUser,
+    );
   }
 
   @Query(() => String)

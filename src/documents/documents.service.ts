@@ -50,7 +50,6 @@ export class DocumentsService {
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
     filename = user.username + '_' + Date.now() + `_0` + ext;
-
     const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
       where: {
         TopicId: topicId,
@@ -71,6 +70,9 @@ export class DocumentsService {
       throw new ConflictException(
         'หัวข้อดังกล่าวในปีการศึกษานี้มีเอกสารซ้ำอยู่แล้ว',
       );
+
+    const gzipFile = await createReadStream();
+
     try {
       const createFileList = await this.prisma.fileUploadData.create({
         data: {
@@ -80,51 +82,43 @@ export class DocumentsService {
           fileUrl: '',
           semesterId: semesterId,
           subCategoryId: getCategoryList.id,
-          TopicId: topicId,
+          TopicId: topicId == 0 ? null : topicId,
           categoryId: getCategoryList.categories.id,
           authorId: user.id,
         },
       });
 
-      const gzipFile = await createReadStream();
-      return await new Promise(async (resolve, reject) =>
-        minioClient.putObject(
-          'sar-dev',
-          filename,
-          gzipFile,
-          //    stat.size,
-          // 'audio/ogg',
-          function (e) {
-            if (e) {
-              reject(false);
-            } else {
-              resolve(true);
-            }
-            console.log(
-              'Successfully uploaded to storage.itpsru.in.th --> user: %s filename:',
-              user.username,
-              filename,
-            );
-          },
-        ),
+      await minioClient.putObject(
+        'sar-dev',
+        filename,
+        gzipFile,
+        //    stat.size,
+        // 'audio/ogg',
+        function (e) {
+          if (e) {
+            console.log(e);
+          } else {
+            console.log('Successfully uploaded file to minio');
+          }
+        },
       );
       return true;
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
       return false;
     }
   }
 
   async searchFileByName(
     searchFileByName: SearchSemesterFile,
+    getUser,
   ): Promise<searchFileBySemesterModel[]> {
     const { semester } = searchFileByName;
     console.log(semester);
-
     const getFileByCategories = await this.prisma.category.findMany({
       include: {
         FileUploadData: {
-          where: { semesterId: semester },
+          where: { semesterId: semester, authorId: getUser.id },
           select: {
             index: true,
           },
@@ -134,8 +128,6 @@ export class DocumentsService {
         categoryName: 'asc',
       },
     });
-
-    console.log(getFileByCategories);
     return getFileByCategories;
   }
   async getTopicDocument(
