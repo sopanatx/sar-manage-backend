@@ -116,6 +116,14 @@ type DocumentFileList {
   SubCategory: SubCategory
 }
 
+type semesterModel {
+  id: String
+  semesterName: String
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type childrenNav {
   id: Float!
   childrenName: String
@@ -159,6 +167,7 @@ type Query {
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
+  getSemesterById(CheckSemesterDto: CheckSemesterDto!): semesterModel!
   searchFileBySemester(searchSemesterFile: SearchSemesterFile!): [searchFileBySemesterModel!]!
   getDocumentByCategory(getDocumentByCategory: GetDocumentByCategories!): String!
   getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
@@ -175,6 +184,11 @@ input AdminGetUserDto {
 
 input FindSemesterDto {
   semester: String!
+}
+
+input CheckSemesterDto {
+  semester: String
+  id: String
 }
 
 input SearchSemesterFile {
@@ -267,10 +281,6 @@ input UploadDocumentDto {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
-
-input CheckSemesterDto {
-  semester: String!
-}
 
 input UpdateDocumentDto {
   semesterId: String!

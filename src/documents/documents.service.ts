@@ -111,14 +111,14 @@ export class DocumentsService {
 
   async searchFileByName(
     searchFileByName: SearchSemesterFile,
+    getUser,
   ): Promise<searchFileBySemesterModel[]> {
     const { semester } = searchFileByName;
     console.log(semester);
-
     const getFileByCategories = await this.prisma.category.findMany({
       include: {
         FileUploadData: {
-          where: { semesterId: semester },
+          where: { semesterId: semester, authorId: getUser.id },
           select: {
             index: true,
           },
@@ -128,8 +128,6 @@ export class DocumentsService {
         categoryName: 'asc',
       },
     });
-
-    console.log(getFileByCategories);
     return getFileByCategories;
   }
   async getTopicDocument(
