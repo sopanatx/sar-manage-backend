@@ -37,5 +37,6 @@ export class AdminUpdateUserDto {
   @Field({ nullable: true })
   @IsString()
   @MaxLength(255)
+  @IsOptional()
   password: string;
 }
