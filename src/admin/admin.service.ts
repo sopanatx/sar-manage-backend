@@ -10,6 +10,7 @@ import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { UserModel } from './models/User.model';
 import * as bcrypt from 'bcrypt';
 import { AdminGetUserDto } from './dto/AdminGetUser';
+import sendMail from 'src/shared/mail.service';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -43,6 +44,11 @@ export class AdminService {
         userLevel,
       },
     });
+    await sendMail(
+      'updateAccountByAdmin',
+      updateUser.email,
+      updateUser.fullname,
+    );
     return updateUser;
   }
 

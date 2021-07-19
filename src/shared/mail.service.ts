@@ -1,0 +1,65 @@
+import * as ejs from 'ejs';
+import * as nodemailer from 'nodemailer';
+import * as moment from 'moment';
+
+const sendMail = async (
+  type: string,
+  email: string,
+  fullname: string,
+): Promise<any> => {
+  const Time = moment()
+    .locale('th') //Set Time Format Language To Thai
+    .format('llll');
+
+  let htmlData: string;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_USERNAME,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    });
+    if (type === 'resetPassword') {
+    } else if (type === 'verifyEmail') {
+    } else if (type == 'updateAccountByAdmin') {
+      htmlData = await ejs.renderFile('./src/shared/template.ejs', {
+        url_link: ``,
+        request_time: Time,
+        name: fullname,
+        subheader: 'แจ้งเตือนการแก้ไขบัญชีโดยผู้ดูแลระบบ', // subheader text in email.
+        mailHeader: 'แจ้งเตือนการแก้ไขบัญชีโดยผู้ดูแลระบบ',
+        mailText1:
+          'อีเมลฉบับนี้เป็นอีเมลแจ้งเตือนการแก้ไขบัญชีของท่านโดยผู้ดูแลระบบ',
+        remark:
+          'หากท่านไม่ได้ดำเนินการดังกล่าว โปรดติดต่อผู้ดูแล หรือ ทำการเปลี่ยนรหัสผ่าน',
+        buttonText: '',
+        mailText2: '',
+      });
+    }
+
+    const replacements = {
+      updateAccountByAdmin: {
+        link: '',
+        subject: '[SAR-ITPSRU] แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
+        text: 'แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
+      },
+    };
+
+    const msg = {
+      to: email, // Change to your recipient
+      from: 'no-reply@itpsru.in.th', // Change to your verified sender
+      subject: replacements[type].subject, // Subject line    ,
+      text: replacements[type].text, // plaintext body,
+      html: htmlData,
+    };
+
+    await transporter.sendMail(msg);
+  } catch (error) {
+    console.log(error);
+  }
+};
+export default sendMail;
