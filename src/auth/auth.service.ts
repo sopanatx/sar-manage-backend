@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 import { getUserTypesFromSchema } from '@graphql-tools/utils';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 import { MyAccountModel } from './model/myaccount.model';
+import sendMail from 'src/shared/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -55,6 +56,7 @@ export class AuthService {
         username: true,
         fullname: true,
         userLevel: true,
+        email: true,
       },
     });
     if (!validate)
@@ -86,6 +88,7 @@ export class AuthService {
         'ไม่สามารถอัปเดท refreshToken ได้',
       );
     }
+    await sendMail('login', getUser.email, getUser.fullname);
     return {
       accessToken,
       refreshToken,
@@ -206,6 +209,12 @@ export class AuthService {
           username,
         },
       });
+      await sendMail(
+        'UpdateAccount',
+        updateAccount.email,
+        updateAccount.fullname,
+      );
+
       return true;
     } catch {
       return false;
