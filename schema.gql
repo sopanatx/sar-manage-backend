@@ -164,6 +164,7 @@ type Query {
   getServiceStatus: getServiceStatus!
   AdminGetAllUser: [UserModel!]!
   AdminGetUser(AdminGetUserDto: AdminGetUserDto!): UserModel!
+  AdminCreateSemester(AdminCreateSemesterDto: AdminCreateSemesterDto!): Boolean!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
@@ -180,6 +181,10 @@ type Query {
 
 input AdminGetUserDto {
   userId: String!
+}
+
+input AdminCreateSemesterDto {
+  semester: String!
 }
 
 input FindSemesterDto {

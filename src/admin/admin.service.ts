@@ -11,6 +11,7 @@ import { UserModel } from './models/User.model';
 import * as bcrypt from 'bcrypt';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import sendMail from 'src/shared/mail.service';
+import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -106,5 +107,30 @@ export class AdminService {
     });
     if (!getUser) throw new NotFoundException('User does not exist.');
     return getUser;
+  }
+
+  async AdminCreateSemester(
+    adminCreateSemesterDto: AdminCreateSemesterDto,
+  ): Promise<boolean> {
+    const { semester } = adminCreateSemesterDto;
+    const getSemester = await this.prisma.semester.findUnique({
+      where: {
+        semesterName: semester,
+      },
+    });
+
+    if (getSemester)
+      throw new ConflictException('This semester already exists');
+
+    try {
+      await this.prisma.semester.create({
+        data: {
+          semesterName: semester,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+    return true;
   }
 }

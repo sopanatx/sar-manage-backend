@@ -5,6 +5,7 @@ import { RolesGuard } from 'src/auth/strategy/roles.guard';
 import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
+import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
@@ -70,5 +71,20 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminGetUser(adminGetUser);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => Boolean)
+  async AdminCreateSemester(
+    @Args('AdminCreateSemesterDto')
+    adminCreateSemesterDto: AdminCreateSemesterDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    console.log(adminCreateSemesterDto);
+    return await this.adminService.AdminCreateSemester(adminCreateSemesterDto);
   }
 }
