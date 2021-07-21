@@ -19,6 +19,7 @@ import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
 import { Mutation } from '@nestjs/graphql';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AddTopicDto } from './dto/addTopic.dto';
+import { SemesterModel } from './models/Semester.model';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -211,5 +212,10 @@ export class AdminService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async AdminGetAllSemester(): Promise<SemesterModel[]> {
+    const getSemester = await this.prisma.semester.findMany();
+    return getSemester;
   }
 }

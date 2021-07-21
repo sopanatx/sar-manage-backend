@@ -149,6 +149,14 @@ type HasTopicListModel {
   topicCount: Float!
 }
 
+type SemesterModel {
+  id: String
+  semesterName: String
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 type UserModel {
   id: String!
   username: String!
@@ -164,6 +172,7 @@ type Query {
   getServiceStatus: getServiceStatus!
   AdminGetAllUser: [UserModel!]!
   AdminGetUser(AdminGetUserDto: AdminGetUserDto!): UserModel!
+  AdminGetAllSemester: [SemesterModel!]!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!

@@ -11,6 +11,7 @@ import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
 import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
+import { SemesterModel } from './models/Semester.model';
 import { UserModel } from './models/User.model';
 
 @Resolver()
@@ -115,5 +116,14 @@ export class AdminResolver {
         );
       return await this.adminService.AdminAddTopic(addTopicDto);
     }
+  }
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [SemesterModel])
+  async AdminGetAllSemester(@GetUser() getUser): Promise<SemesterModel[]> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminGetAllSemester();
   }
 }
