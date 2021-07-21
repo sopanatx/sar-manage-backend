@@ -5,8 +5,10 @@ import { RolesGuard } from 'src/auth/strategy/roles.guard';
 import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
+import { AddTopicDto } from './dto/addTopic.dto';
 import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
+import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { UserModel } from './models/User.model';
@@ -74,7 +76,7 @@ export class AdminResolver {
   }
 
   @UseGuards(GqlAuthGuard)
-  @Query(() => Boolean)
+  @Mutation(() => Boolean)
   async AdminCreateSemester(
     @Args('AdminCreateSemesterDto')
     adminCreateSemesterDto: AdminCreateSemesterDto,
@@ -86,5 +88,32 @@ export class AdminResolver {
       );
     console.log(adminCreateSemesterDto);
     return await this.adminService.AdminCreateSemester(adminCreateSemesterDto);
+  }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminDeleteUser(
+    @Args('AdminDeleteUserDto') adminDeleteUserDto: AdminDeleteUserDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminDeleteUser(adminDeleteUserDto);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminAddTopic(
+    @Args('addTopicDto') addTopicDto: AddTopicDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    {
+      if (getUser.role != 'Admin')
+        throw new UnauthorizedException(
+          `Your account not have permission to access this menu`,
+        );
+      return await this.adminService.AdminAddTopic(addTopicDto);
+    }
   }
 }

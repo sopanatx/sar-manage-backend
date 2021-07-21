@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
@@ -12,11 +13,21 @@ import * as bcrypt from 'bcrypt';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import sendMail from 'src/shared/mail.service';
 import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
+import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
+import { AddSubCategoryDto } from './dto/addSubCategory.dto';
+import { GqlAuthGuard } from 'src/auth/strategy/graphql-auth.guard';
+import { Mutation } from '@nestjs/graphql';
+import { GetUser } from 'src/shared/decorators/decorators';
+import { AddTopicDto } from './dto/addTopic.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
   async AdminGetAllUserService(): Promise<UserModel[]> {
     return await this.prisma.account.findMany({
+      where: {
+        isDeleted: false,
+      },
+
       select: {
         id: true,
         username: true,
@@ -109,6 +120,26 @@ export class AdminService {
     return getUser;
   }
 
+  async AdminDeleteUser(
+    adminDeleteUserDto: AdminDeleteUserDto,
+  ): Promise<boolean> {
+    const { userId } = adminDeleteUserDto;
+    try {
+      await this.prisma.account.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          isDeleted: true,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
   async AdminCreateSemester(
     adminCreateSemesterDto: AdminCreateSemesterDto,
   ): Promise<boolean> {
@@ -132,5 +163,53 @@ export class AdminService {
       throw new InternalServerErrorException();
     }
     return true;
+  }
+
+  async AdminAddSubCategory(
+    addSubCategoryDto: AddSubCategoryDto,
+  ): Promise<boolean> {
+    const { subCategoryName, categoryId } = addSubCategoryDto;
+
+    const getSubCategory = await this.prisma.subCategory.findMany({
+      where: {
+        subCategoryName,
+      },
+    });
+    if (getSubCategory)
+      throw new ConflictException('This subcategory already exists');
+    try {
+      await this.prisma.subCategory.create({
+        data: {
+          categoryId: categoryId,
+          subCategoryName,
+          subCategoryDescription: '',
+          isAvailable: true,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+  async AdminAddTopic(addTopicDto: AddTopicDto): Promise<boolean> {
+    const { subCategoryId, topicName } = addTopicDto;
+
+    const getTopic = await this.prisma.topic.findMany({
+      where: {
+        topicName: addTopicDto.topicName,
+      },
+    });
+    if (getTopic) throw new ConflictException('This topic already exists');
+    try {
+      await this.prisma.topic.create({
+        data: {
+          topicName: topicName,
+          subCategoryId,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

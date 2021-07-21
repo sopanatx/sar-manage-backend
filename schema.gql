@@ -164,7 +164,6 @@ type Query {
   getServiceStatus: getServiceStatus!
   AdminGetAllUser: [UserModel!]!
   AdminGetUser(AdminGetUserDto: AdminGetUserDto!): UserModel!
-  AdminCreateSemester(AdminCreateSemesterDto: AdminCreateSemesterDto!): Boolean!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
@@ -181,10 +180,6 @@ type Query {
 
 input AdminGetUserDto {
   userId: String!
-}
-
-input AdminCreateSemesterDto {
-  semester: String!
 }
 
 input FindSemesterDto {
@@ -227,6 +222,9 @@ input HasTopicListDto {
 type Mutation {
   AdminUpdateUser(AdminUpdateUser: AdminUpdateUserDto!): UserModel!
   AdminCreateUser(AdminCreateUserDto: AdminCreateUserDto!): Boolean!
+  AdminCreateSemester(AdminCreateSemesterDto: AdminCreateSemesterDto!): Boolean!
+  AdminDeleteUser(AdminDeleteUserDto: AdminDeleteUserDto!): Boolean!
+  AdminAddTopic(addTopicDto: AddTopicDto!): Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -251,6 +249,19 @@ input AdminCreateUserDto {
   fullname: String!
   email: String!
   userLevel: String!
+}
+
+input AdminCreateSemesterDto {
+  semester: String!
+}
+
+input AdminDeleteUserDto {
+  userId: String!
+}
+
+input AddTopicDto {
+  subCategoryId: Float!
+  topicName: String!
 }
 
 input LocalAuthDto {

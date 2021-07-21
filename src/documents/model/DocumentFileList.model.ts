@@ -38,7 +38,7 @@ export class DocumentFileList {
   authorId: string;
 
   @Field()
-  isDeleted: Boolean;
+  isDeleted: boolean;
 
   @Field()
   createdAt: Date;
