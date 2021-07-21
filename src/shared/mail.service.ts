@@ -39,10 +39,44 @@ const sendMail = async (
         buttonText: '',
         mailText2: '',
       });
+    } else if (type == 'login') {
+      htmlData = await ejs.renderFile('./src/shared/template.ejs', {
+        url_link: ``,
+        request_time: Time,
+        name: fullname,
+        subheader: 'แจ้งเตือนการเข้าสู่ระบบ SAR ITPSRU', // subheader text in email.
+        mailHeader: 'แจ้งเตือนการเข้าสู่ระบบ SAR ITPSRU',
+        mailText1: 'อีเมลฉบับนี้เป็นอีเมลแจ้งเตือนการเข้าสู่ระบบของท่าน',
+        remark: 'หากท่านไม่ได้ดำเนินการดังกล่าวทำการเปลี่ยนรหัสผ่านทันที',
+        buttonText: '',
+        mailText2: '',
+      });
+    } else if (type == 'UpdateAccount') {
+      htmlData = await ejs.renderFile('./src/shared/template.ejs', {
+        url_link: ``,
+        request_time: Time,
+        name: fullname,
+        subheader: 'แจ้งเตือนการแก้ไขบัญชีของท่าน', // subheader text in email.
+        mailHeader: 'แจ้งเตือนการแก้ไขบัญชีของท่าน',
+        mailText1: 'อีเมลฉบับนี้เป็นอีเมลแจ้งเตือนการแก้ไขบัญชีของท่าน',
+        remark:
+          'หากท่านไม่ได้ดำเนินการดังกล่าว โปรดติดต่อผู้ดูแล หรือ ทำการเปลี่ยนรหัสผ่าน',
+        buttonText: '',
+        mailText2: '',
+      });
     }
-
     const replacements = {
       updateAccountByAdmin: {
+        link: '',
+        subject: '[SAR-ITPSRU] แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
+        text: 'แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
+      },
+      login: {
+        link: '',
+        subject: '[SAR-ITPSRU] แจ้งเตือนการเข้าสู่ระบบ SAR ITPSRU',
+        text: 'แจ้งเตือนการเข้าสู่ระบบ SAR ITPSRU',
+      },
+      UpdateAccount: {
         link: '',
         subject: '[SAR-ITPSRU] แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
         text: 'แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',

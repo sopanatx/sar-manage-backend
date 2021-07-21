@@ -53,7 +53,7 @@ export class AuthResolver {
   async UpdateAccountInfo(
     @Args('UpdateAccount') updateAccountDto: UpdateAccountDto,
     @GetUser() getUser,
-  ): Promise<Boolean> {
+  ): Promise<boolean> {
     return await this.authService.UpdateAccountInfo(updateAccountDto, getUser);
   }
 

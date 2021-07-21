@@ -5,9 +5,13 @@ import { RolesGuard } from 'src/auth/strategy/roles.guard';
 import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
+import { AddTopicDto } from './dto/addTopic.dto';
+import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
+import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
+import { SemesterModel } from './models/Semester.model';
 import { UserModel } from './models/User.model';
 
 @Resolver()
@@ -70,5 +74,56 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminGetUser(adminGetUser);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminCreateSemester(
+    @Args('AdminCreateSemesterDto')
+    adminCreateSemesterDto: AdminCreateSemesterDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    console.log(adminCreateSemesterDto);
+    return await this.adminService.AdminCreateSemester(adminCreateSemesterDto);
+  }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminDeleteUser(
+    @Args('AdminDeleteUserDto') adminDeleteUserDto: AdminDeleteUserDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminDeleteUser(adminDeleteUserDto);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminAddTopic(
+    @Args('addTopicDto') addTopicDto: AddTopicDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    {
+      if (getUser.role != 'Admin')
+        throw new UnauthorizedException(
+          `Your account not have permission to access this menu`,
+        );
+      return await this.adminService.AdminAddTopic(addTopicDto);
+    }
+  }
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [SemesterModel])
+  async AdminGetAllSemester(@GetUser() getUser): Promise<SemesterModel[]> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminGetAllSemester();
   }
 }
