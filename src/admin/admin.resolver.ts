@@ -11,6 +11,7 @@ import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
 import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
+import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 import { SemesterModel } from './models/Semester.model';
 import { UserModel } from './models/User.model';
 
@@ -125,5 +126,18 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminGetAllSemester();
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminDeleteSemester(
+    @Args('AdminDeleteSemesterDto') deleteSemester: DeleteSemesterDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        'Your account not have permission to access this menu',
+      );
+    return await this.adminService.AdminDeleteSemester(deleteSemester);
   }
 }

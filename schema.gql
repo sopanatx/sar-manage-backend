@@ -234,6 +234,7 @@ type Mutation {
   AdminCreateSemester(AdminCreateSemesterDto: AdminCreateSemesterDto!): Boolean!
   AdminDeleteUser(AdminDeleteUserDto: AdminDeleteUserDto!): Boolean!
   AdminAddTopic(addTopicDto: AddTopicDto!): Boolean!
+  AdminDeleteSemester(AdminDeleteSemesterDto: DeleteSemesterDto!): Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -271,6 +272,10 @@ input AdminDeleteUserDto {
 input AddTopicDto {
   subCategoryId: Float!
   topicName: String!
+}
+
+input DeleteSemesterDto {
+  semesterId: String!
 }
 
 input LocalAuthDto {

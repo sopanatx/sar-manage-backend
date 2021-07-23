@@ -20,6 +20,7 @@ import { Mutation } from '@nestjs/graphql';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AddTopicDto } from './dto/addTopic.dto';
 import { SemesterModel } from './models/Semester.model';
+import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -215,7 +216,30 @@ export class AdminService {
   }
 
   async AdminGetAllSemester(): Promise<SemesterModel[]> {
-    const getSemester = await this.prisma.semester.findMany();
+    const getSemester = await this.prisma.semester.findMany({
+      where: {
+        isAvailable: false,
+      },
+    });
     return getSemester;
+  }
+
+  async AdminDeleteSemester(
+    deleteSemesterDto: DeleteSemesterDto,
+  ): Promise<boolean> {
+    const { semesterId } = deleteSemesterDto;
+    try {
+      await this.prisma.semester.update({
+        where: {
+          id: semesterId,
+        },
+        data: {
+          isAvailable: false,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }
