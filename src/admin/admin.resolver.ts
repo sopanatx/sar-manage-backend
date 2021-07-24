@@ -5,6 +5,7 @@ import { RolesGuard } from 'src/auth/strategy/roles.guard';
 import { Roles } from 'src/decorators/roles';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AdminService } from './admin.service';
+import { AddSubCategoryDto } from './dto/addSubCategory.dto';
 import { AddTopicDto } from './dto/addTopic.dto';
 import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
@@ -12,6 +13,7 @@ import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
+import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
 import { CategoryModel } from './models/Category.model';
 import { SemesterModel } from './models/Semester.model';
 import { SubCategoryModel } from './models/SubCategory.model';
@@ -163,5 +165,32 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminGetAllCategory();
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminAddSubCategory(
+    @Args('AddSubCategoryDto')
+    addSubCategoryDto: AddSubCategoryDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminAddSubCategory(addSubCategoryDto);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminDeleteSubCategory(
+    @Args('DeleteSubCategoryDto') deleteSubCategoryDto: DeleteSubCategoryDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminDeleteSubCategory(deleteSubCategoryDto);
   }
 }

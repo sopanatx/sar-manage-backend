@@ -23,6 +23,7 @@ import { SemesterModel } from './models/Semester.model';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 import { SubCategoryModel } from './models/SubCategory.model';
 import { CategoryModel } from './models/Category.model';
+import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -177,9 +178,10 @@ export class AdminService {
     const getSubCategory = await this.prisma.subCategory.findMany({
       where: {
         subCategoryName,
+        categoryId,
       },
     });
-    if (getSubCategory)
+    if (getSubCategory.length > 0)
       throw new ConflictException('This subcategory already exists');
     try {
       await this.prisma.subCategory.create({
@@ -261,8 +263,33 @@ export class AdminService {
           where: {
             isAvailable: true,
           },
+          orderBy: {
+            id: 'asc',
+          },
         },
       },
+      orderBy: {
+        id: 'asc',
+      },
     });
+  }
+
+  async AdminDeleteSubCategory(
+    deleteSubCategoryDto: DeleteSubCategoryDto,
+  ): Promise<boolean> {
+    const { subCategoryId } = deleteSubCategoryDto;
+    try {
+      await this.prisma.subCategory.update({
+        where: {
+          id: subCategoryId,
+        },
+        data: {
+          isAvailable: false,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

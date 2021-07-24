@@ -69,6 +69,8 @@ type getCategories {
 
 type FileUploadDataByName {
   index: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type searchFileBySemesterModel {
@@ -255,6 +257,8 @@ type Mutation {
   AdminDeleteUser(AdminDeleteUserDto: AdminDeleteUserDto!): Boolean!
   AdminAddTopic(addTopicDto: AddTopicDto!): Boolean!
   AdminDeleteSemester(AdminDeleteSemesterDto: DeleteSemesterDto!): Boolean!
+  AdminAddSubCategory(AddSubCategoryDto: AddSubCategoryDto!): Boolean!
+  AdminDeleteSubCategory(DeleteSubCategoryDto: DeleteSubCategoryDto!): Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -296,6 +300,15 @@ input AddTopicDto {
 
 input DeleteSemesterDto {
   semesterId: String!
+}
+
+input AddSubCategoryDto {
+  subCategoryName: String!
+  categoryId: Float!
+}
+
+input DeleteSubCategoryDto {
+  subCategoryId: Float!
 }
 
 input LocalAuthDto {
