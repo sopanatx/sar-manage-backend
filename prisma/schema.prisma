@@ -34,7 +34,7 @@ model PasswordReset {
 model Semester {
   id             String           @unique @default(uuid())
   semesterName   String           @unique
-  isAvailable    Boolean?         @default(false)
+  isAvailable    Boolean?         @default(true)
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
   // FileUploadData FileUploadData[]

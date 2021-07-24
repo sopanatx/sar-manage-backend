@@ -118,9 +118,15 @@ export class DocumentsService {
     const getFileByCategories = await this.prisma.category.findMany({
       include: {
         FileUploadData: {
-          where: { semesterId: semester, authorId: getUser.id },
+          where: {
+            semesterId: semester,
+            authorId: getUser.id,
+            isDeleted: false,
+          },
           select: {
             index: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },

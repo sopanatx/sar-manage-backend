@@ -17,7 +17,6 @@ import { AdminResolver } from './admin/admin.resolver';
 import { AdminService } from './admin/admin.service';
 
 const isDevelopmentEnv = process.env.ENV == 'development' ? true : false;
-console.log({ isDevelopmentEnv });
 @Module({
   imports: [
     ConfigModule.forRoot(),

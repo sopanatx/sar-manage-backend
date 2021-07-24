@@ -20,6 +20,10 @@ import { Mutation } from '@nestjs/graphql';
 import { GetUser } from 'src/shared/decorators/decorators';
 import { AddTopicDto } from './dto/addTopic.dto';
 import { SemesterModel } from './models/Semester.model';
+import { DeleteSemesterDto } from './dto/deleteSemester.dto';
+import { SubCategoryModel } from './models/SubCategory.model';
+import { CategoryModel } from './models/Category.model';
+import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -174,9 +178,10 @@ export class AdminService {
     const getSubCategory = await this.prisma.subCategory.findMany({
       where: {
         subCategoryName,
+        categoryId,
       },
     });
-    if (getSubCategory)
+    if (getSubCategory.length > 0)
       throw new ConflictException('This subcategory already exists');
     try {
       await this.prisma.subCategory.create({
@@ -215,7 +220,76 @@ export class AdminService {
   }
 
   async AdminGetAllSemester(): Promise<SemesterModel[]> {
-    const getSemester = await this.prisma.semester.findMany();
+    const getSemester = await this.prisma.semester.findMany({
+      where: {
+        isAvailable: true,
+      },
+    });
     return getSemester;
+  }
+
+  async AdminDeleteSemester(
+    deleteSemesterDto: DeleteSemesterDto,
+  ): Promise<boolean> {
+    const { semesterId } = deleteSemesterDto;
+    try {
+      await this.prisma.semester.update({
+        where: {
+          id: semesterId,
+        },
+        data: {
+          isAvailable: false,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async AdminGetAllSubCategory(): Promise<SubCategoryModel[]> {
+    const getSubCategory = await this.prisma.subCategory.findMany({
+      where: {
+        isAvailable: true,
+      },
+    });
+    return getSubCategory;
+  }
+
+  async AdminGetAllCategory(): Promise<CategoryModel[]> {
+    return await this.prisma.category.findMany({
+      include: {
+        SubCategory: {
+          where: {
+            isAvailable: true,
+          },
+          orderBy: {
+            id: 'asc',
+          },
+        },
+      },
+      orderBy: {
+        id: 'asc',
+      },
+    });
+  }
+
+  async AdminDeleteSubCategory(
+    deleteSubCategoryDto: DeleteSubCategoryDto,
+  ): Promise<boolean> {
+    const { subCategoryId } = deleteSubCategoryDto;
+    try {
+      await this.prisma.subCategory.update({
+        where: {
+          id: subCategoryId,
+        },
+        data: {
+          isAvailable: false,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

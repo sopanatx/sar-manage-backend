@@ -4,4 +4,10 @@ import { GraphQLUpload } from 'apollo-server-express';
 export class FileUploadDataByName {
   @Field()
   index: string;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }
