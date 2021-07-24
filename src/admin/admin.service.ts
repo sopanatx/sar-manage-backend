@@ -218,7 +218,7 @@ export class AdminService {
   async AdminGetAllSemester(): Promise<SemesterModel[]> {
     const getSemester = await this.prisma.semester.findMany({
       where: {
-        isAvailable: false,
+        isAvailable: true,
       },
     });
     return getSemester;
