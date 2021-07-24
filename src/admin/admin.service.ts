@@ -21,6 +21,8 @@ import { GetUser } from 'src/shared/decorators/decorators';
 import { AddTopicDto } from './dto/addTopic.dto';
 import { SemesterModel } from './models/Semester.model';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
+import { SubCategoryModel } from './models/SubCategory.model';
+import { CategoryModel } from './models/Category.model';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -241,5 +243,26 @@ export class AdminService {
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
+  }
+
+  async AdminGetAllSubCategory(): Promise<SubCategoryModel[]> {
+    const getSubCategory = await this.prisma.subCategory.findMany({
+      where: {
+        isAvailable: true,
+      },
+    });
+    return getSubCategory;
+  }
+
+  async AdminGetAllCategory(): Promise<CategoryModel[]> {
+    return await this.prisma.category.findMany({
+      include: {
+        SubCategory: {
+          where: {
+            isAvailable: true,
+          },
+        },
+      },
+    });
   }
 }

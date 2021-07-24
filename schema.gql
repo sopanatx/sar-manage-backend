@@ -149,6 +149,24 @@ type HasTopicListModel {
   topicCount: Float!
 }
 
+type SubCategoryModel {
+  id: Float!
+  subCategoryName: String!
+  subCategoryDescription: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CategoryModel {
+  id: Float!
+  categoryName: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  SubCategory: [SubCategoryModel!]
+}
+
 type SemesterModel {
   id: String
   semesterName: String
@@ -173,6 +191,8 @@ type Query {
   AdminGetAllUser: [UserModel!]!
   AdminGetUser(AdminGetUserDto: AdminGetUserDto!): UserModel!
   AdminGetAllSemester: [SemesterModel!]!
+  AdminGetAllSubCategory: [SubCategoryModel!]!
+  AdminGetAllCategory: [CategoryModel!]!
   MyAccountInfo: MyAccountModel!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!

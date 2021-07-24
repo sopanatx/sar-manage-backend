@@ -12,7 +12,9 @@ import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
+import { CategoryModel } from './models/Category.model';
 import { SemesterModel } from './models/Semester.model';
+import { SubCategoryModel } from './models/SubCategory.model';
 import { UserModel } from './models/User.model';
 
 @Resolver()
@@ -88,7 +90,7 @@ export class AdminResolver {
       throw new UnauthorizedException(
         `Your account not have permission to access this menu`,
       );
-    console.log(adminCreateSemesterDto);
+
     return await this.adminService.AdminCreateSemester(adminCreateSemesterDto);
   }
   @UseGuards(GqlAuthGuard)
@@ -139,5 +141,27 @@ export class AdminResolver {
         'Your account not have permission to access this menu',
       );
     return await this.adminService.AdminDeleteSemester(deleteSemester);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [SubCategoryModel])
+  async AdminGetAllSubCategory(
+    @GetUser() getUser,
+  ): Promise<SubCategoryModel[]> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminGetAllSubCategory();
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [CategoryModel])
+  async AdminGetAllCategory(@GetUser() getUser): Promise<CategoryModel[]> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminGetAllCategory();
   }
 }

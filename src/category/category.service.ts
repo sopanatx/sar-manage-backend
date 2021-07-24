@@ -19,6 +19,9 @@ export class CategoryService {
           include: {
             Topic: true,
           },
+          where: {
+            isAvailable: true,
+          },
           orderBy: {
             id: 'asc',
           },
@@ -50,10 +53,6 @@ export class CategoryService {
       },
     });
     console.log(getTopic);
-
-    // return {
-    //   hasTopicList: getTopic.length == 0 ? false : true,
-    // };
     return {
       hasTopicList: getTopic.length == 0 ? false : true,
       topicCount: getTopic.length,
