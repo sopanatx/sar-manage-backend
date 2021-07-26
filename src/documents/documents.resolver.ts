@@ -20,6 +20,10 @@ import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 import { DocumentFileList } from './model/DocumentFileList.model';
 import { UpdateDocumentDto } from './dto/UpdateDocument.dto';
 import { semesterModel } from './model/semester.model';
+import { FileUploadData } from './model/FileUploadData.model';
+import { GetFileUploadListDto } from './dto/getFileUploadList.dto';
+import { getPresignedLinkModel } from './model/getPresignedLink.model';
+import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -163,5 +167,26 @@ export class DocumentsResolver {
     console.log(semesterId, documentId);
 
     return true;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [FileUploadData])
+  async getFileUploadList(
+    @Args('GetFileUploadListDto') getFileUploadListDto: GetFileUploadListDto,
+    @GetUser() getUser,
+  ): Promise<FileUploadData[]> {
+    return this.documentService.getFileUploadList(
+      getFileUploadListDto,
+      getUser,
+    );
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => getPresignedLinkModel)
+  async getPresignedLink(
+    @Args('GetPresignedLinkDto') getPresignedLinkDto: GetPresignedLinkDto,
+    @GetUser() getUser,
+  ): Promise<getPresignedLinkModel> {
+    return this.documentService.getPresignedLink(getPresignedLinkDto, getUser);
   }
 }

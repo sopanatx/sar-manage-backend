@@ -1,9 +1,8 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { SubCategory } from './SubCategory.model';
-import { Topic } from './Topic.model';
 
 @ObjectType()
-export class DocumentFileList {
+export class FileUploadData {
   @Field()
   id: string;
 
