@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
@@ -20,6 +21,10 @@ import * as zlib from 'zlib';
 import { GetDocumentBySubCategory } from './dto/getDocumentBySubCategory.dto';
 import { DocumentFileList } from './model/DocumentFileList.model';
 import { UpdateDocumentDto } from './dto/UpdateDocument.dto';
+import { GetFileUploadListDto } from './dto/getFileUploadList.dto';
+import { FileUploadData } from './model/FileUploadData.model';
+import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
+import { getPresignedLinkModel } from './model/getPresignedLink.model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -49,10 +54,10 @@ export class DocumentsService {
     //check file extension or mimetype is in allowed array]
     //if not then throw error to user about wrong file
     //TODO: Change filename and upload to s3
-    filename = user.username + '_' + Date.now() + `_0` + ext;
+    filename = Date.now() + '_' + index + '_' + title + '_0' + ext;
     const checkIsReplaceIndex = await this.prisma.fileUploadData.findMany({
       where: {
-        TopicId: topicId,
+        subCategoryId,
         index: index,
         authorId: user.id,
         semesterId,
@@ -65,29 +70,14 @@ export class DocumentsService {
       },
     });
 
-    console.log(getCategoryList);
+    console.log(checkIsReplaceIndex);
     if (checkIsReplaceIndex.length > 0)
       throw new ConflictException(
         'หัวข้อดังกล่าวในปีการศึกษานี้มีเอกสารซ้ำอยู่แล้ว',
       );
 
     const gzipFile = await createReadStream();
-
     try {
-      const createFileList = await this.prisma.fileUploadData.create({
-        data: {
-          index,
-          title: title,
-          filename: filename,
-          fileUrl: '',
-          semesterId: semesterId,
-          subCategoryId: getCategoryList.id,
-          TopicId: topicId == 0 ? null : topicId,
-          categoryId: getCategoryList.categories.id,
-          authorId: user.id,
-        },
-      });
-
       await minioClient.putObject(
         'sar-dev',
         filename,
@@ -102,6 +92,26 @@ export class DocumentsService {
           }
         },
       );
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(err);
+    }
+
+    try {
+      const createFileList = await this.prisma.fileUploadData.create({
+        data: {
+          index,
+          title: title,
+          filename: filename,
+          fileUrl: `https://storage.itpsru.in.th/sar-dev/${filename}`,
+          semesterId: semesterId,
+          subCategoryId: getCategoryList.id,
+          TopicId: topicId == 0 ? null : topicId,
+          categoryId: getCategoryList.categories.id,
+          authorId: user.id,
+        },
+      });
+
       return true;
     } catch (error) {
       console.error('Error:', error);
@@ -212,5 +222,63 @@ export class DocumentsService {
     const { semesterId, documentId } = updateDocumentDto;
 
     return true;
+  }
+
+  async getFileUploadList(
+    getFileUploadListDto: GetFileUploadListDto,
+    getUser: any,
+  ): Promise<FileUploadData[]> {
+    const { semesterId, subCategoryId, TopicId } = getFileUploadListDto;
+    const { id } = getUser;
+    const getFileUploadList = await this.prisma.fileUploadData.findMany({
+      where: {
+        subCategoryId,
+        semesterId,
+        authorId: id,
+        TopicId,
+        isDeleted: false,
+      },
+      include: {
+        SubCategory: true,
+        Topic: true,
+      },
+    });
+    return getFileUploadList;
+  }
+
+  async getPresignedLink(
+    getPresignedLinkDto: GetPresignedLinkDto,
+    getUser,
+  ): Promise<getPresignedLinkModel> {
+    const { fileId } = getPresignedLinkDto;
+    const { id } = getUser;
+
+    const getFile = await this.prisma.fileUploadData.findUnique({
+      where: {
+        id: fileId,
+      },
+      select: {
+        filename: true,
+        title: true,
+        authorId: true,
+      },
+    });
+    if (getFile.authorId !== id) throw new UnauthorizedException();
+    let url: string;
+    // try {
+    //   url = await minioClient.presignedGetObject(
+    //     'sar-dev',
+    //     getFile.filename,
+    //     1,
+    //   );
+    //   return {
+    //     presignedUrl: `https://storage.itpsru.in.th/sar-dev/${getFile.filename}`,
+    //   };
+    // } catch (e) {
+    //   throw new InternalServerErrorException(e);
+    // }
+    return {
+      presignedUrl: `https://storage.itpsru.in.th/sar-dev/${getFile.filename}`,
+    };
   }
 }

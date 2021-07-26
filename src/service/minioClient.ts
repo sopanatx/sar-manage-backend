@@ -1,8 +1,8 @@
 import * as Minio from 'minio';
 export const minioClient = new Minio.Client({
-  endPoint: 'storage.itpsru.in.th',
-  port: 443,
-  useSSL: true,
+  endPoint: '103.164.54.207',
+  port: 9000,
+  useSSL: false,
   accessKey: process.env.S3_ACCESSKEY,
   secretKey: process.env.S3_SECRETKEY,
 });

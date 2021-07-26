@@ -106,7 +106,7 @@ type DocumentFileList {
   filename: String!
   fileUrl: String
   shortenUrl: String
-  TopicId: Float!
+  TopicId: Float
   categoryId: Float!
   semesterId: String!
   subCategoryId: Float!
@@ -124,6 +124,29 @@ type semesterModel {
   isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+type FileUploadData {
+  id: String!
+  index: String!
+  title: String!
+  filename: String!
+  fileUrl: String
+  shortenUrl: String
+  TopicId: Float
+  categoryId: Float!
+  semesterId: String!
+  subCategoryId: Float!
+  authorId: String!
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  SubCategory: SubCategory
+}
+
+type getPresignedLinkModel {
+  presignedUrl: String!
 }
 
 type childrenNav {
@@ -204,6 +227,8 @@ type Query {
   getTopicBySubCategories(getTopicBySubCategories: GetTopicBySubCategories!): [TopicModel!]!
   getUploadListTopic(getUploadListByTopic: GetUploadListByTopicDto!): Boolean!
   getDocumentBySubCategory(GetDocumentBySubCategory: GetDocumentBySubCategory!): [DocumentFileList!]!
+  getFileUploadList(GetFileUploadListDto: GetFileUploadListDto!): [FileUploadData!]!
+  getPresignedLink(GetPresignedLinkDto: GetPresignedLinkDto!): getPresignedLinkModel!
   getCategories: [getCategories!]!
   getHasTopicList(getHasTopicList: HasTopicListDto!): HasTopicListModel!
   getNavMemu: [getNavMemu!]!
@@ -244,6 +269,16 @@ input GetUploadListByTopicDto {
 input GetDocumentBySubCategory {
   subCategoryId: Float!
   semesterId: String
+}
+
+input GetFileUploadListDto {
+  subCategoryId: Float!
+  TopicId: Float
+  semesterId: String!
+}
+
+input GetPresignedLinkDto {
+  fileId: String!
 }
 
 input HasTopicListDto {
