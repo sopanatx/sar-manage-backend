@@ -84,13 +84,6 @@ export class DocumentsService {
         gzipFile,
         //    stat.size,
         // 'audio/ogg',
-        function (e) {
-          if (e) {
-            console.log(e);
-          } else {
-            console.log('Successfully uploaded file to minio');
-          }
-        },
       );
     } catch (err) {
       console.log(err);
@@ -218,10 +211,25 @@ export class DocumentsService {
     return getDoc;
   }
 
-  async UpdateDocument(updateDocumentDto: UpdateDocumentDto): Promise<boolean> {
-    const { semesterId, documentId } = updateDocumentDto;
-
-    return true;
+  async UpdateDocument(
+    updateDocumentDto: UpdateDocumentDto,
+    getUser,
+  ): Promise<boolean> {
+    const { documentId, title, index } = updateDocumentDto;
+    try {
+      await this.prisma.fileUploadData.update({
+        where: {
+          id: documentId,
+        },
+        data: {
+          title,
+          index,
+        },
+      });
+      return true;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
   }
 
   async getFileUploadList(

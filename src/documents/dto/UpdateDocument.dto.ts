@@ -1,13 +1,17 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsUUID } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class UpdateDocumentDto {
   @Field()
   @IsUUID()
-  semesterId: string;
+  documentId: string;
 
   @Field()
-  @IsUUID()
-  documentId: string;
+  @IsString()
+  title: string;
+
+  @Field()
+  @IsString()
+  index: string;
 }

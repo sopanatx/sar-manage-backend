@@ -381,6 +381,7 @@ input UploadDocumentDto {
 scalar Upload
 
 input UpdateDocumentDto {
-  semesterId: String!
   documentId: String!
+  title: String!
+  index: String!
 }

@@ -161,12 +161,13 @@ export class DocumentsResolver {
   @Mutation(() => Boolean)
   async UpdateDocument(
     @Args('UpdateDocumentDto') updateDocument: UpdateDocumentDto,
+    @GetUser() getUser,
   ): Promise<any> {
-    const { semesterId, documentId } = updateDocument;
+    const { title, index, documentId } = updateDocument;
 
-    console.log(semesterId, documentId);
+    console.log(title, documentId);
 
-    return true;
+    return await this.documentService.UpdateDocument(updateDocument, getUser);
   }
 
   @UseGuards(GqlAuthGuard)
