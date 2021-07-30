@@ -18,6 +18,7 @@ import { PasswordResetDto } from './dto/PasswordReset.dto';
 import { UserIp } from 'src/decorators/getIP';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 import { MyAccountModel } from './model/myaccount.model';
+import { ValidateTokenDto } from './dto/validateToken.dto';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -61,5 +62,12 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   async MyAccountInfo(@GetUser() getUser): Promise<MyAccountModel> {
     return await this.authService.MyProfileInfo(getUser);
+  }
+
+  @Query(() => Boolean)
+  async validatePasswordResetToken(
+    @Args('ValidatePasswordToken') validatePasswordToken: ValidateTokenDto,
+  ): Promise<boolean> {
+    return await this.authService.validateToken(validatePasswordToken);
   }
 }
