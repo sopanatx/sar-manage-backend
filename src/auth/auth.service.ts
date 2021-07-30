@@ -142,6 +142,8 @@ export class AuthService {
       },
       select: {
         username: true,
+        email: true,
+        fullname: true,
       },
     });
     if (!getUser) {
@@ -170,6 +172,7 @@ export class AuthService {
         },
       });
 
+      await sendMail('resetPassword', getUser.email, getUser.fullname, token);
       return {
         status: 'ok',
         statusMessage:
@@ -253,6 +256,7 @@ export class AuthService {
     if (!getToken) throw new NotFoundException('Token not found');
     if (getToken.expired < currentDate)
       throw new NotFoundException('Token expired');
+
     return true;
   }
 
