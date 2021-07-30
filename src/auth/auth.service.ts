@@ -283,6 +283,11 @@ export class AuthService {
           passwordSalt: salt,
         },
       });
+      await this.prisma.passwordReset.delete({
+        where: {
+          resetPasswordToken: token,
+        },
+      });
       return true;
     } catch (e) {
       throw new InternalServerErrorException(e);
