@@ -24,6 +24,7 @@ import { FileUploadData } from './model/FileUploadData.model';
 import { GetFileUploadListDto } from './dto/getFileUploadList.dto';
 import { getPresignedLinkModel } from './model/getPresignedLink.model';
 import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
+import { DeleteDocumentDto } from './dto/deleteDocument.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -189,5 +190,17 @@ export class DocumentsResolver {
     @GetUser() getUser,
   ): Promise<getPresignedLinkModel> {
     return this.documentService.getPresignedLink(getPresignedLinkDto, getUser);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async deleteDocument(
+    @Args('DeleteDocumentDto') deleteDocumentDto: DeleteDocumentDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    return await this.documentService.deleteDocument(
+      deleteDocumentDto,
+      getUser,
+    );
   }
 }
