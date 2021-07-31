@@ -42,3 +42,4 @@ lerna-debug.log*
 tmp/*
 .aws/credentials
 .aws/serverless.yml
+.vscode/settings.json

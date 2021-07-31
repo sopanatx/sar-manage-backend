@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsOptional, IsUUID } from 'class-validator';
+import { IsEmail, IsOptional, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class ValidateTokenDto {
   @Field()
-  @IsUUID()
+  @IsString()
   token: string;
 
   @Field({ nullable: true })

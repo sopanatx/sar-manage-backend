@@ -19,6 +19,7 @@ import { UserIp } from 'src/decorators/getIP';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 import { MyAccountModel } from './model/myaccount.model';
 import { ValidateTokenDto } from './dto/validateToken.dto';
+import { ResetPasswordDto } from './dto/ResetPassword.dto';
 @Resolver()
 export class AuthResolver {
   constructor(
@@ -69,5 +70,12 @@ export class AuthResolver {
     @Args('ValidatePasswordToken') validatePasswordToken: ValidateTokenDto,
   ): Promise<boolean> {
     return await this.authService.validateToken(validatePasswordToken);
+  }
+
+  @Mutation(() => Boolean)
+  async ResetPassword(
+    @Args('ResetPasswordDto') resetPasswordDto: ResetPasswordDto,
+  ): Promise<boolean> {
+    return await this.authService.ResetPassword(resetPasswordDto);
   }
 }
