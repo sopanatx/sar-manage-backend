@@ -6,6 +6,7 @@ const sendMail = async (
   type: string,
   email: string,
   fullname: string,
+  resetUnique?: string,
 ): Promise<any> => {
   const Time = moment()
     .locale('th') //Set Time Format Language To Thai
@@ -24,6 +25,17 @@ const sendMail = async (
       },
     });
     if (type === 'resetPassword') {
+      htmlData = await ejs.renderFile('./src/shared/template.ejs', {
+        url_link: `https://sar-dev.itpsru.in.th/reset/${resetUnique}`,
+        request_time: Time,
+        name: fullname,
+        subheader: 'คำขอเปลี่ยนรหัสผ่าน', // subheader text in email.
+        mailHeader: 'แจ้งเตือนคำขอเปลี่ยนรหัสผ่าน',
+        mailText1: 'อีเมลฉบับนี้เป็นอีเมลแจ้งเตือนคำขอเปลี่ยนรหัสผ่าน',
+        remark: 'หากท่านไม่ได้ดำเนินการดังกล่าว ท่านไม่จำเป็นต้องดำเนินการใดๆ',
+        buttonText: '',
+        mailText2: `ท่านสามารถเปลี่ยนรหัสผ่านได้ที่ https://sar-dev.itpsru.in.th/reset/${resetUnique}`,
+      });
     } else if (type === 'verifyEmail') {
     } else if (type == 'updateAccountByAdmin') {
       htmlData = await ejs.renderFile('./src/shared/template.ejs', {
@@ -61,7 +73,7 @@ const sendMail = async (
         mailText1: 'อีเมลฉบับนี้เป็นอีเมลแจ้งเตือนการแก้ไขบัญชีของท่าน',
         remark:
           'หากท่านไม่ได้ดำเนินการดังกล่าว โปรดติดต่อผู้ดูแล หรือ ทำการเปลี่ยนรหัสผ่าน',
-        buttonText: '',
+        buttonText: 'Test',
         mailText2: '',
       });
     }
@@ -80,6 +92,11 @@ const sendMail = async (
         link: '',
         subject: '[SAR-ITPSRU] แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
         text: 'แจ้งเตือนการปรับปรุงข้อมูลบัญชีของท่าน',
+      },
+      resetPassword: {
+        link: '',
+        subject: '[SAR-ITPSRU] แจ้งเตือนคำขอเปลี่ยนรหัสผ่าน',
+        text: 'แจ้งเตือนคำขอเปลี่ยนรหัสผ่านบัญชีของท่าน',
       },
     };
 

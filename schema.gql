@@ -219,6 +219,7 @@ type Query {
   AdminGetAllSubCategory: [SubCategoryModel!]!
   AdminGetAllCategory: [CategoryModel!]!
   MyAccountInfo: MyAccountModel!
+  validatePasswordResetToken(ValidatePasswordToken: ValidateTokenDto!): Boolean!
   getSemester: [getSemester!]!
   findSemester(findSemesterDto: FindSemesterDto!): getSemester!
   getSemesterById(CheckSemesterDto: CheckSemesterDto!): semesterModel!
@@ -236,6 +237,11 @@ type Query {
 
 input AdminGetUserDto {
   userId: String!
+}
+
+input ValidateTokenDto {
+  token: String!
+  email: String
 }
 
 input FindSemesterDto {
@@ -301,6 +307,7 @@ type Mutation {
   uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
   UpdateDocument(UpdateDocumentDto: UpdateDocumentDto!): Boolean!
+  deleteDocument(DeleteDocumentDto: DeleteDocumentDto!): Boolean!
 }
 
 input AdminUpdateUserDto {
@@ -384,4 +391,8 @@ input UpdateDocumentDto {
   documentId: String!
   title: String!
   index: String!
+}
+
+input DeleteDocumentDto {
+  documentId: String!
 }

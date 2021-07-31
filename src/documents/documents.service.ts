@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { BadRequestException } from '@nestjs/common';
@@ -25,6 +26,7 @@ import { GetFileUploadListDto } from './dto/getFileUploadList.dto';
 import { FileUploadData } from './model/FileUploadData.model';
 import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
 import { getPresignedLinkModel } from './model/getPresignedLink.model';
+import { DeleteDocumentDto } from './dto/deleteDocument.dto';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -288,5 +290,28 @@ export class DocumentsService {
     return {
       presignedUrl: `https://storage.itpsru.in.th/sar-dev/${getFile.filename}`,
     };
+  }
+  async deleteDocument(
+    deleteDocumentDto: DeleteDocumentDto,
+    getUser,
+  ): Promise<boolean> {
+    const getDocument = await this.prisma.fileUploadData.findUnique({
+      where: {
+        id: deleteDocumentDto.documentId,
+      },
+    });
+    if (!getDocument) throw new NotFoundException();
+    if (getDocument.authorId !== getUser.id) throw new UnauthorizedException();
+
+    try {
+      await this.prisma.fileUploadData.delete({
+        where: {
+          id: deleteDocumentDto.documentId,
+        },
+      });
+      return true;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
   }
 }

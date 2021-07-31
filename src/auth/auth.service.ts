@@ -19,6 +19,8 @@ import { getUserTypesFromSchema } from '@graphql-tools/utils';
 import { UpdateAccountDto } from './dto/UpdateAccount.dto';
 import { MyAccountModel } from './model/myaccount.model';
 import sendMail from 'src/shared/mail.service';
+import { ValidateTokenDto } from './dto/validateToken.dto';
+import { ResetPasswordDto } from './dto/ResetPassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -140,6 +142,8 @@ export class AuthService {
       },
       select: {
         username: true,
+        email: true,
+        fullname: true,
       },
     });
     if (!getUser) {
@@ -168,6 +172,7 @@ export class AuthService {
         },
       });
 
+      await sendMail('resetPassword', getUser.email, getUser.fullname, token);
       return {
         status: 'ok',
         statusMessage:
@@ -239,5 +244,53 @@ export class AuthService {
     });
     if (!getAccountInfo) throw new NotFoundException();
     return getAccountInfo;
+  }
+  async validateToken(validateToken: ValidateTokenDto): Promise<boolean> {
+    const { token } = validateToken;
+    const getToken = await this.prisma.passwordReset.findUnique({
+      where: {
+        resetPasswordToken: token,
+      },
+    });
+    const currentDate = new Date();
+    if (!getToken) throw new NotFoundException('Token not found');
+    if (getToken.expired < currentDate)
+      throw new NotFoundException('Token expired');
+
+    return true;
+  }
+
+  async ResetPassword(resetPassword: ResetPasswordDto): Promise<boolean> {
+    const { token, password } = resetPassword;
+    const getToken = await this.prisma.passwordReset.findUnique({
+      where: {
+        resetPasswordToken: token,
+      },
+    });
+    if (!getToken) throw new NotFoundException('Token not found');
+    const currentDate = new Date();
+    if (getToken.expired < currentDate)
+      throw new NotFoundException('Token expired');
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
+    try {
+      await this.prisma.account.update({
+        where: {
+          username: getToken.username,
+        },
+        data: {
+          password: hash,
+          passwordSalt: salt,
+        },
+      });
+      await this.prisma.passwordReset.delete({
+        where: {
+          resetPasswordToken: token,
+        },
+      });
+      return true;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
   }
 }
