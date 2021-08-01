@@ -25,6 +25,8 @@ import { GetFileUploadListDto } from './dto/getFileUploadList.dto';
 import { getPresignedLinkModel } from './model/getPresignedLink.model';
 import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
 import { DeleteDocumentDto } from './dto/deleteDocument.dto';
+import { SearchFileByNameDto } from './dto/searchFileByName';
+import SearchFileByNameModel from './model/searchFileByName.model';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -200,6 +202,18 @@ export class DocumentsResolver {
   ): Promise<boolean> {
     return await this.documentService.deleteDocument(
       deleteDocumentDto,
+      getUser,
+    );
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => [SearchFileByNameModel])
+  async searchDocumentByName(
+    @Args('SearchFileByNameDto') searchFileByNameDto: SearchFileByNameDto,
+    @GetUser() getUser,
+  ): Promise<SearchFileByNameModel[]> {
+    return this.documentService.searchDocumentByName(
+      searchFileByNameDto,
       getUser,
     );
   }

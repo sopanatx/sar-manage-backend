@@ -149,6 +149,26 @@ type getPresignedLinkModel {
   presignedUrl: String!
 }
 
+type SearchFileByNameModel {
+  id: String!
+  index: String!
+  title: String!
+  filename: String!
+  fileUrl: String
+  shortenUrl: String
+  TopicId: Float
+  categoryId: Float!
+  semesterId: String!
+  subCategoryId: Float!
+  authorId: String!
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  SubCategory: SubCategory
+  Semester: semesterModel
+}
+
 type childrenNav {
   id: Float!
   childrenName: String
@@ -309,6 +329,7 @@ type Mutation {
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
   UpdateDocument(UpdateDocumentDto: UpdateDocumentDto!): Boolean!
   deleteDocument(DeleteDocumentDto: DeleteDocumentDto!): Boolean!
+  searchDocumentByName(SearchFileByNameDto: SearchFileByNameDto!): [SearchFileByNameModel!]!
 }
 
 input AdminUpdateUserDto {
@@ -401,4 +422,8 @@ input UpdateDocumentDto {
 
 input DeleteDocumentDto {
   documentId: String!
+}
+
+input SearchFileByNameDto {
+  name: String!
 }

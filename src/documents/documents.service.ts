@@ -27,6 +27,8 @@ import { FileUploadData } from './model/FileUploadData.model';
 import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
 import { getPresignedLinkModel } from './model/getPresignedLink.model';
 import { DeleteDocumentDto } from './dto/deleteDocument.dto';
+import { SearchFileByNameDto } from './dto/searchFileByName';
+import SearchFileByNameModel from './model/searchFileByName.model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -313,5 +315,28 @@ export class DocumentsService {
     } catch (e) {
       throw new InternalServerErrorException(e);
     }
+  }
+
+  async searchDocumentByName(
+    searchFileByNameDto: SearchFileByNameDto,
+    getUser,
+  ): Promise<SearchFileByNameModel[]> {
+    const { name } = searchFileByNameDto;
+    const getFile = await this.prisma.fileUploadData.findMany({
+      where: {
+        title: name,
+        authorId: getUser.id,
+        isDeleted: false,
+      },
+      include: {
+        SubCategory: {
+          include: {
+            Topic: true,
+          },
+        },
+        Semester: true,
+      },
+    });
+    return getFile;
   }
 }
