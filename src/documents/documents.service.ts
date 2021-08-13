@@ -324,7 +324,7 @@ export class DocumentsService {
     const { name } = searchFileByNameDto;
     const getFile = await this.prisma.fileUploadData.findMany({
       where: {
-        title: name,
+        title: { contains: name },
         authorId: getUser.id,
         isDeleted: false,
       },
