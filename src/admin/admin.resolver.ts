@@ -11,6 +11,7 @@ import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
 import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
+import { AdminUpdateSubCategoryDto } from './dto/AdminUpdateSubCategory.dto';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
@@ -192,5 +193,18 @@ export class AdminResolver {
         `Your account not have permission to access this menu`,
       );
     return await this.adminService.AdminDeleteSubCategory(deleteSubCategoryDto);
+  }
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminUpdateSubCategory(
+    @Args('UpdateSubCategoryDto')
+    updateSubCategoryDto: AdminUpdateSubCategoryDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminUpdateSubCategory(updateSubCategoryDto);
   }
 }

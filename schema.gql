@@ -320,6 +320,7 @@ type Mutation {
   AdminDeleteSemester(AdminDeleteSemesterDto: DeleteSemesterDto!): Boolean!
   AdminAddSubCategory(AddSubCategoryDto: AddSubCategoryDto!): Boolean!
   AdminDeleteSubCategory(DeleteSubCategoryDto: DeleteSubCategoryDto!): Boolean!
+  AdminUpdateSubCategory(UpdateSubCategoryDto: AdminUpdateSubCategoryDto!): Boolean!
   signIn(localAuthDto: LocalAuthDto!): tokenModel!
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
@@ -373,6 +374,11 @@ input AddSubCategoryDto {
 
 input DeleteSubCategoryDto {
   subCategoryId: Float!
+}
+
+input AdminUpdateSubCategoryDto {
+  id: Float!
+  subCategoryName: String
 }
 
 input LocalAuthDto {
