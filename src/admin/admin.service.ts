@@ -24,6 +24,7 @@ import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 import { SubCategoryModel } from './models/SubCategory.model';
 import { CategoryModel } from './models/Category.model';
 import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
+import { AdminUpdateSubCategoryDto } from './dto/AdminUpdateSubCategory.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -291,6 +292,25 @@ export class AdminService {
       return true;
     } catch (error) {
       throw new InternalServerErrorException(error);
+    }
+  }
+
+  async AdminUpdateSubCategory(
+    adminUpdateSubCategoryDto: AdminUpdateSubCategoryDto,
+  ): Promise<boolean> {
+    const { id, subCategoryName } = adminUpdateSubCategoryDto;
+    try {
+      await this.prisma.subCategory.update({
+        where: {
+          id,
+        },
+        data: {
+          subCategoryName,
+        },
+      });
+      return true;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 }
