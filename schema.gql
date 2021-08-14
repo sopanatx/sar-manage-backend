@@ -149,6 +149,26 @@ type getPresignedLinkModel {
   presignedUrl: String!
 }
 
+type SearchFileByNameModel {
+  id: String!
+  index: String!
+  title: String!
+  filename: String!
+  fileUrl: String
+  shortenUrl: String
+  TopicId: Float
+  categoryId: Float!
+  semesterId: String!
+  subCategoryId: Float!
+  authorId: String!
+  isDeleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+  SubCategory: SubCategory
+  Semester: semesterModel
+}
+
 type childrenNav {
   id: Float!
   childrenName: String
@@ -304,10 +324,12 @@ type Mutation {
   signUp(localAuthRegisterDto: LocalAuthRegisterDto!): tokenModel!
   requestPasswordReset(PasswordResetDto: PasswordResetDto!): PasswordResetResponseModel!
   UpdateAccountInfo(UpdateAccount: UpdateAccountDto!): Boolean!
+  ResetPassword(ResetPasswordDto: ResetPasswordDto!): Boolean!
   uploadFile(DocumentDetails: UploadDocumentDto!, file: Upload!): Boolean!
   checkSemester(checkSemester: CheckSemesterDto!): Boolean!
   UpdateDocument(UpdateDocumentDto: UpdateDocumentDto!): Boolean!
   deleteDocument(DeleteDocumentDto: DeleteDocumentDto!): Boolean!
+  searchDocumentByName(SearchFileByNameDto: SearchFileByNameDto!): [SearchFileByNameModel!]!
 }
 
 input AdminUpdateUserDto {
@@ -375,6 +397,11 @@ input UpdateAccountDto {
   password: String
 }
 
+input ResetPasswordDto {
+  password: String!
+  token: String!
+}
+
 input UploadDocumentDto {
   title: String!
   index: String!
@@ -395,4 +422,8 @@ input UpdateDocumentDto {
 
 input DeleteDocumentDto {
   documentId: String!
+}
+
+input SearchFileByNameDto {
+  name: String!
 }
