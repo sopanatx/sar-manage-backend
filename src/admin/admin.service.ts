@@ -241,7 +241,7 @@ export class AdminService {
         isDeleted: true,
       },
     });
-    if (!getTopic || getTopic.length === 0)
+    if (getTopic.length > 0)
       throw new NotFoundException('ไม่มีหัวข้อดังกล่าว หรือได้ถูกลบไปแล้ว');
     try {
       await this.prisma.topic.update({
@@ -266,7 +266,7 @@ export class AdminService {
         isDeleted: true,
       },
     });
-    if (!getTopic || getTopic.length === 0)
+    if (getTopic.length > 0)
       throw new NotFoundException('ไม่มีหัวข้อดังกล่าว หรือได้ถูกลบไปแล้ว');
     try {
       await this.prisma.topic.update({
