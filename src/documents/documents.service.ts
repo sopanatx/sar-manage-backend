@@ -152,6 +152,7 @@ export class DocumentsService {
     const getTopicList = await this.prisma.topic.findMany({
       where: {
         subCategoryId,
+        isDeleted:false,
       },
     });
     console.log(getTopicList);
