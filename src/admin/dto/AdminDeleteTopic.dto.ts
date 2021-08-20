@@ -6,5 +6,5 @@ export class AdminDeleteTopicDto {
   @Field()
   @IsNumber()
   @IsNotEmpty()
-  topicId: string;
+  topicId: number;
 }
