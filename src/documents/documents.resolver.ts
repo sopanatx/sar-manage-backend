@@ -27,6 +27,8 @@ import { GetPresignedLinkDto } from './dto/getPreSignedLink.dto';
 import { DeleteDocumentDto } from './dto/deleteDocument.dto';
 import { SearchFileByNameDto } from './dto/searchFileByName';
 import SearchFileByNameModel from './model/searchFileByName.model';
+import { GetSubCategoryInfoModel } from './model/getSubCategories.model';
+import { GetSubCategoriesInfoDto } from './dto/getSubCategoriesInfo.dto';
 @Resolver()
 export class DocumentsResolver {
   constructor(
@@ -216,5 +218,15 @@ export class DocumentsResolver {
       searchFileByNameDto,
       getUser,
     );
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Query(() => [GetSubCategoryInfoModel])
+  async getSubCategoryInfo(
+    @Args('getSubCategoryInfoDto')
+    getSubCategoryInfoDto: GetSubCategoriesInfoDto,
+    @GetUser() getUser,
+  ): Promise<GetSubCategoryInfoModel[]> {
+    return this.documentService.getSubCategoriesInfo(getSubCategoryInfoDto);
   }
 }

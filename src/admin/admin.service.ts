@@ -150,9 +150,10 @@ export class AdminService {
     adminCreateSemesterDto: AdminCreateSemesterDto,
   ): Promise<boolean> {
     const { semester } = adminCreateSemesterDto;
-    const getSemester = await this.prisma.semester.findUnique({
+    const getSemester = await this.prisma.semester.findMany({
       where: {
         semesterName: semester,
+        isAvailable:true,
       },
     });
 
