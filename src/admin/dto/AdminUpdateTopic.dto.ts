@@ -12,7 +12,7 @@ export class AdminUpdateTopicDto {
   @Field()
   @IsNumber()
   @IsNotEmpty()
-  topicId: string;
+  topicId: number;
 
   @Field()
   @IsString({ message: '标题不能为空' })
