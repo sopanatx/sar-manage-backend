@@ -46,6 +46,7 @@ type Topic {
   topicDetails: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  isDeleted: Boolean!
 }
 
 type SubCategories {
@@ -331,6 +332,8 @@ type Mutation {
   AdminCreateSemester(AdminCreateSemesterDto: AdminCreateSemesterDto!): Boolean!
   AdminDeleteUser(AdminDeleteUserDto: AdminDeleteUserDto!): Boolean!
   AdminAddTopic(addTopicDto: AddTopicDto!): Boolean!
+  AdminDeleteTopic(AdminDeleteTopicDto: AdminDeleteTopicDto!): Boolean!
+  AdminUpdateTopic(AdminUpdateTopic: AdminUpdateTopicDto!): Boolean!
   AdminDeleteSemester(AdminDeleteSemesterDto: DeleteSemesterDto!): Boolean!
   AdminAddSubCategory(AddSubCategoryDto: AddSubCategoryDto!): Boolean!
   AdminDeleteSubCategory(DeleteSubCategoryDto: DeleteSubCategoryDto!): Boolean!
@@ -374,6 +377,15 @@ input AdminDeleteUserDto {
 
 input AddTopicDto {
   subCategoryId: Float!
+  topicName: String!
+}
+
+input AdminDeleteTopicDto {
+  topicId: String!
+}
+
+input AdminUpdateTopicDto {
+  topicId: String!
   topicName: String!
 }
 
