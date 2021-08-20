@@ -29,6 +29,8 @@ import { getPresignedLinkModel } from './model/getPresignedLink.model';
 import { DeleteDocumentDto } from './dto/deleteDocument.dto';
 import { SearchFileByNameDto } from './dto/searchFileByName';
 import SearchFileByNameModel from './model/searchFileByName.model';
+import { GetSubCategoriesInfoDto } from './dto/getSubCategoriesInfo.dto';
+import { GetSubCategoryInfoModel } from './model/getSubCategories.model';
 @Injectable()
 export class DocumentsService {
   constructor(private prisma: PrismaService) {}
@@ -338,5 +340,17 @@ export class DocumentsService {
       },
     });
     return getFile;
+  }
+
+  async getSubCategoriesInfo(
+    getSubCategoryInfoDto: GetSubCategoriesInfoDto,
+  ): Promise<GetSubCategoryInfoModel[]> {
+    const { id } = getSubCategoryInfoDto;
+    const getSubCategoryInfo = await this.prisma.subCategory.findMany({
+      where: {
+        id: id,
+      },
+    });
+    return getSubCategoryInfo;
   }
 }

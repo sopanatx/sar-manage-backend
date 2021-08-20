@@ -169,6 +169,15 @@ type SearchFileByNameModel {
   Semester: semesterModel
 }
 
+type GetSubCategoryInfoModel {
+  id: Float!
+  subCategoryName: String!
+  subCategoryDescription: String!
+  isAvailable: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type childrenNav {
   id: Float!
   childrenName: String
@@ -250,6 +259,7 @@ type Query {
   getDocumentBySubCategory(GetDocumentBySubCategory: GetDocumentBySubCategory!): [DocumentFileList!]!
   getFileUploadList(GetFileUploadListDto: GetFileUploadListDto!): [FileUploadData!]!
   getPresignedLink(GetPresignedLinkDto: GetPresignedLinkDto!): getPresignedLinkModel!
+  getSubCategoryInfo(getSubCategoryInfoDto: GetSubCategoriesInfoDto!): [GetSubCategoryInfoModel!]!
   getCategories: [getCategories!]!
   getHasTopicList(getHasTopicList: HasTopicListDto!): HasTopicListModel!
   getNavMemu: [getNavMemu!]!
@@ -305,6 +315,10 @@ input GetFileUploadListDto {
 
 input GetPresignedLinkDto {
   fileId: String!
+}
+
+input GetSubCategoriesInfoDto {
+  id: Float!
 }
 
 input HasTopicListDto {
