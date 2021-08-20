@@ -9,9 +9,11 @@ import { AddSubCategoryDto } from './dto/addSubCategory.dto';
 import { AddTopicDto } from './dto/addTopic.dto';
 import { AdminCreateSemesterDto } from './dto/AdminCreateSemester.dto';
 import { AdminCreateUserDto } from './dto/AdminCreateUser.dto';
+import { AdminDeleteTopicDto } from './dto/AdminDeleteTopic.dto';
 import { AdminDeleteUserDto } from './dto/AdminDeleteUser.dto';
 import { AdminGetUserDto } from './dto/AdminGetUser';
 import { AdminUpdateSubCategoryDto } from './dto/AdminUpdateSubCategory.dto';
+import { AdminUpdateTopicDto } from './dto/AdminUpdateTopic.dto';
 import { AdminUpdateUserDto } from './dto/AdminUpdateUser.dto';
 import { DeleteSemesterDto } from './dto/deleteSemester.dto';
 import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
@@ -123,6 +125,33 @@ export class AdminResolver {
       return await this.adminService.AdminAddTopic(addTopicDto);
     }
   }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminDeleteTopic(
+    @Args('AdminDeleteTopicDto') deleteTopicDto: AdminDeleteTopicDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminDeleteTopic(deleteTopicDto);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Boolean)
+  async AdminUpdateTopic(
+    @Args('AdminUpdateTopic') updateTopic: AdminUpdateTopicDto,
+    @GetUser() getUser,
+  ): Promise<boolean> {
+    if (getUser.role != 'Admin')
+      throw new UnauthorizedException(
+        `Your account not have permission to access this menu`,
+      );
+    return await this.adminService.AdminUpdateTopic(updateTopic);
+  }
+
   @UseGuards(GqlAuthGuard)
   @Query(() => [SemesterModel])
   async AdminGetAllSemester(@GetUser() getUser): Promise<SemesterModel[]> {

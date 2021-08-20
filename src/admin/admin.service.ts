@@ -25,6 +25,8 @@ import { SubCategoryModel } from './models/SubCategory.model';
 import { CategoryModel } from './models/Category.model';
 import { DeleteSubCategoryDto } from './dto/deleteSubCategory.dto';
 import { AdminUpdateSubCategoryDto } from './dto/AdminUpdateSubCategory.dto';
+import { AdminDeleteTopicDto } from './dto/AdminDeleteTopic.dto';
+import { AdminUpdateTopicDto } from './dto/AdminUpdateTopic.dto';
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
@@ -60,6 +62,7 @@ export class AdminService {
         email,
         fullname,
         userLevel,
+        updatedAt: new Date(),
       },
     });
     await sendMail(
@@ -153,7 +156,7 @@ export class AdminService {
     const getSemester = await this.prisma.semester.findMany({
       where: {
         semesterName: semester,
-        isAvailable:true,
+        isAvailable: true,
       },
     });
 
@@ -205,15 +208,74 @@ export class AdminService {
 
     const getTopic = await this.prisma.topic.findMany({
       where: {
+        subCategoryId,
         topicName: addTopicDto.topicName,
+        isDeleted: false,
       },
     });
-    if (getTopic) throw new ConflictException('This topic already exists');
+    if (getTopic.length > 0)
+      throw new ConflictException('This topic already exists');
+    const getSubCategory = await this.prisma.subCategory.findMany({
+      where: { id: subCategoryId },
+    });
+    if (!getSubCategory || getSubCategory.length === 0)
+      throw new NotFoundException('Subcategory does not exist');
     try {
       await this.prisma.topic.create({
         data: {
           topicName: topicName,
           subCategoryId,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async AdminDeleteTopic(deleteTopic: AdminDeleteTopicDto): Promise<boolean> {
+    const { topicId } = deleteTopic;
+    const getTopic = await this.prisma.topic.findMany({
+      where: {
+        id: +topicId,
+        isDeleted: true,
+      },
+    });
+    if (!getTopic || getTopic.length === 0)
+      throw new NotFoundException('ไม่มีหัวข้อดังกล่าว หรือได้ถูกลบไปแล้ว');
+    try {
+      await this.prisma.topic.update({
+        where: {
+          id: +topicId,
+        },
+        data: {
+          isDeleted: true,
+        },
+      });
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async AdminUpdateTopic(updateTopic: AdminUpdateTopicDto): Promise<boolean> {
+    const { topicId, topicName } = updateTopic;
+    const getTopic = await this.prisma.topic.findMany({
+      where: {
+        id: +topicId,
+        isDeleted: true,
+      },
+    });
+    if (!getTopic || getTopic.length === 0)
+      throw new NotFoundException('ไม่มีหัวข้อดังกล่าว หรือได้ถูกลบไปแล้ว');
+    try {
+      await this.prisma.topic.update({
+        where: {
+          id: +topicId,
+        },
+        data: {
+          topicName: topicName,
+          updatedAt: new Date(),
         },
       });
       return true;
@@ -307,6 +369,7 @@ export class AdminService {
         },
         data: {
           subCategoryName,
+          updatedAt: new Date(),
         },
       });
       return true;

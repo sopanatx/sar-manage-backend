@@ -17,4 +17,7 @@ export class Topic {
 
   @Field()
   updatedAt?: Date;
+
+  @Field()
+  isDeleted: boolean;
 }
