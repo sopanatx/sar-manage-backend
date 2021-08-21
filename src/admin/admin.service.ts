@@ -167,7 +167,6 @@ export class AdminService {
       await this.prisma.semester.create({
         data: {
           semesterName: semester,
-          isAvailable: true,
         },
       });
     } catch (error) {
