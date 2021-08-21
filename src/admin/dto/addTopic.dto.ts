@@ -10,6 +10,6 @@ export class AddTopicDto {
   @Field()
   @IsString()
   @MinLength(5, { message: 'TopicName is too short' })
-  @MaxLength(255, { message: 'TopicName is too long' })
+  @MaxLength(1500, { message: 'TopicName is too long' })
   topicName: string;
 }
