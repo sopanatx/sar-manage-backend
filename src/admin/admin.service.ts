@@ -160,7 +160,7 @@ export class AdminService {
       },
     });
 
-    if (getSemester)
+    if (getSemester.length > 0)
       throw new ConflictException('This semester already exists');
 
     try {
