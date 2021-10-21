@@ -22,7 +22,8 @@ export class AppResolver {
   async getServiceStatus(): Promise<getServiceStatus> {
     return {
       status: 'OK',
-      serviceName: 'ระบบจัดการเอกสารประกันคุณภาพการศึกษา',
+      serviceName:
+        'ระบบสารสนเทศเพื่อจัดเก็บเอกสารงานประกันคุณภาพการศึกษาระดับหลักสูตร',
       isInMaintenance: false,
     };
   }
