@@ -184,6 +184,7 @@ export class AdminService {
       where: {
         subCategoryName,
         categoryId,
+        isAvailable: true,
       },
     });
     if (getSubCategory.length > 0)
